@@ -1,0 +1,45 @@
+.DS_STORE
+config.rb
+.sass-cache/
+
+# ProcessWire Files And Folders
+*.old
+*.old/*
+*.new
+*.new/*
+old
+old/*
+*.1
+*.1/*
+sess_*
+*.cache
+*.swp
+*.swo
+*.sh
+site/config-dev.php
+site/assets/cache/**
+site/assets/files/**
+site/assets/logs/**
+site/assets/sessions/**
+!site/assets/**/.*
+site/assets/installed.php
+site/templates/assets/**/rev-manifest.json
+site/templates/assets/**/*.css
+site/templates/assets/**/*.map.css
+!site/templates/assets/**/editor.css
+site/templates/assets/**/*bundle.js
+site/templates/assets/**/*.js.map
+site/templates/assets/img/*
+!site/templates/assets/img/raw
+site/templates/views/partials/svg/*
+!site/templates/views/partials/svg/raw
+site/templates/assets/vendor
+site/templates/assets/public
+
+# ignore grunt files
+node_modules
+npm-debug.log
+
+# ignore generated source maps
+*.css.map
+*.js.map
