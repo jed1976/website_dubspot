@@ -8,12 +8,12 @@
  * Please see the file /wire/config.php which contains all configuration options you may
  * specify here. Simply copy any of the configuration options from that file and paste
  * them into this file in order to modify them.
- * 
+ *
  * SECURITY NOTICE
  * In non-dedicated environments, you should lock down the permissions of this file so
  * that it cannot be seen by other users on the system. For more information, please
  * see the config.php section at: https://processwire.com/docs/security/file-permissions/
- * 
+ *
  * This file is licensed under the MIT license
  * https://processwire.com/about/license/mit/
  *
@@ -38,7 +38,7 @@ if(!defined("PROCESSWIRE")) die();
  * @var bool
  *
  */
-$config->debug = false;
+$config->debug = true;
 
 
 /*** INSTALLER CONFIG ********************************************************************/
@@ -46,7 +46,7 @@ $config->debug = false;
 
 /**
  * Installer: Database Configuration
- * 
+ *
  */
 $config->dbHost = 'localhost';
 $config->dbName = 'dubspot';
@@ -55,39 +55,44 @@ $config->dbPass = '0959i7ErO0RGNtJVy1oWCb0GVY6kq2';
 $config->dbPort = '3306';
 
 /**
- * Installer: User Authentication Salt 
- * 
+ * Installer: User Authentication Salt
+ *
  * Must be retained if you migrate your site from one server to another
- * 
+ *
  */
-$config->userAuthSalt = '1f251134f1ea0fbfaa6fe131c0c04dea'; 
+$config->userAuthSalt = '1f251134f1ea0fbfaa6fe131c0c04dea';
 
 /**
  * Installer: File Permission Configuration
- * 
+ *
  */
 $config->chmodDir = '0755'; // permission for directories created by ProcessWire
-$config->chmodFile = '0644'; // permission for files created by ProcessWire 
+$config->chmodFile = '0644'; // permission for files created by ProcessWire
 
 /**
  * Installer: Time zone setting
- * 
+ *
  */
 $config->timezone = 'America/New_York';
 
 /**
  * Installer: Unix timestamp of date/time installed
- * 
+ *
  * This is used to detect which when certain behaviors must be backwards compatible.
  * Please leave this value as-is.
- * 
+ *
  */
 $config->installed = 1487012232;
 
 
 /**
  * Installer: HTTP Hosts Whitelist
- * 
+ *
  */
-$config->httpHosts = array('dubspot.dev', 'www.dubspot.dev');
+$config->httpHosts = array('dubspot.dev');
 
+
+/**
+ * Template helpers
+ */
+$config->prependTemplateFile = '_init.php';

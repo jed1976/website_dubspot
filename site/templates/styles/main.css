@@ -1,1 +1,12 @@
-/* blank */ 
+/* Colors */
+.b--ds-yellow { border-color: #fff440; }
+.bg-ds-yellow { background-color: #fff440; }
+.ds-yellow { color: #fff440; }
+
+/* Scroll */
+.touch-scroll
+{
+  -moz-overflow-scrolling: touch;
+  -ms-overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
+}

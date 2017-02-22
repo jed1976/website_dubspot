@@ -21,7 +21,7 @@
  */
 
 .InputfieldForm .InputfieldCKEditorInline {
-	font-family: Arial, sans-serif;
+	font-family: "Helvetica Neue", Arial, sans-serif;
 }
 .InputfieldForm .InputfieldCKEditorInline p, 
 .InputfieldForm .InputfieldCKEditorInline li, 
@@ -82,9 +82,8 @@
 .InputfieldForm .InputfieldCKEditorInline h3, 
 .InputfieldForm .InputfieldCKEditorInline h4, 
 .InputfieldForm .InputfieldCKEditorInline h5 {
-	color: #222222;
-	font-family: Arial, sans-serif;
-	font-weight: normal;
+	color: #222222;	
+	font-weight: bold;
 	text-transform: none;
 }
 .InputfieldForm .InputfieldCKEditorInline h1 {
