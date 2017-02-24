@@ -15,16 +15,16 @@ echo $container(
   $text_block().
   $block_quote().
   $list(
-    $list_item('Item', 'mb3').
-    $list_item('Content', 'mb3').
+    $list_item('Item', ['class' => 'mb3']).
+    $list_item('Content', ['class' => 'mb3']).
     $list_item()
-  ).
+  )
 
-  $image($urls->assets.'files/1059/dan-freeman.jpg', true, 'Dan Freeman').
-  $image('http://be2.php.net/images/logos/php-logo.svg', true, 'Dan Freeman').
-  $image('https://i1.sndcdn.com/avatars-000004652340-2h8t1y-t500x500.jpg').
-  $video('https://youtu.be/Ssu9PE20RvE').
-  $video('https://vimeo.com/147170777')
+  #$image($urls->assets.'files/1059/dan-freeman.jpg', true, 'Dan Freeman').
+  #$image('http://be2.php.net/images/logos/php-logo.svg', true, 'Dan Freeman').
+  #$image('https://i1.sndcdn.com/avatars-000004652340-2h8t1y-t500x500.jpg').
+  #$video('https://youtu.be/Ssu9PE20RvE').
+  #$video('https://vimeo.com/147170777')
 );
 
 include "partials/foot.php";

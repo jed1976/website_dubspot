@@ -9,14 +9,13 @@
  * Display property to inline-block (dib).
  *
  * @param string  $content      HTML or Text content.
- * @param string  $class        CSS classnames.
- * @param string  $id           HTML identifier.
  * @param array   $attributes   HTML attributes.
+ * @param array   $component    Component name.
  *
  * @return string Rendered HTML of the component.
  */
 
-$list_item = function(string $content = 'List Item', string $class = '', string $id = '', array $attributes = []) use ($element)
+$list_item = function(string $content = 'List Item', array $attributes = [], string $component = 'list_item') use ($element)
 {
-  return $element('li', $content, $class, $id, $attributes);
+  return $element('li', $content, $attributes, $component);
 };

@@ -2,18 +2,18 @@
 /**
  * A block-level link element that can contain other content.
  *
- * @param string $content         HTML or Text content.
- * @param string $link_settings   Link settings: url/new_tab, section, email/subject, tel
- * @param string $class           CSS classnames.
- * @param string $id              HTML identifier.
- * @param array  $attributes      HTML attributes.
+ * @param string  $content          HTML or Text content.
+ * @param string  $link_settings    Link settings: url/new_tab, section, email/subject, tel
+ * @param array   $attributes       HTML attributes.
+ * @param array   $component        Component name.
  *
  * @return string Rendered HTML of the component.
  */
 
-$link_block = function(string $content = '', array $link_settings = [], string $class = '', string $id = '', array $attributes = []) use ($text_link)
+$link_block = function(string $content = '', array $link_settings = [], array $attributes = [], string $component = 'link_block') use ($text_link)
 {
-  $class .= ' dib';
+  $classes = ['class' => ' dib'];
+  $attributes = array_merge($classes, $attributes);
 
-  return $text_link($content, $link_settings, $class, $id, $attributes);
+  return $text_link($content, $link_settings, $attributes, $component);
 };

@@ -4,19 +4,16 @@
  * click to go to another website, scroll to another section
  * of your page, send an email, or call a phone number.
  *
- * @param string $content         HTML or Text content.
- * @param string $link_settings   Link settings: url/new_tab, section, email/subject, tel
- * @param string $class           CSS classnames.
- * @param string $id              HTML identifier.
- * @param array  $attributes      HTML attributes.
+ * @param string  $content          HTML or Text content.
+ * @param string  $link_settings    Link settings: url/new_tab, section, email/subject, tel
+ * @param array   $attributes       HTML attributes.
+ * @param array   $component        Component name.
  *
  * @return string Rendered HTML of the component.
  */
 
-$text_link = function(string $content = '', array $link_settings = [], string $class = '', string $id = '', array $attributes = []) use ($element)
+$text_link = function(string $content = '', array $link_settings = [], array $attributes = [], string $component = 'text_link') use ($element)
 {
-  $attributes['class'] = '';
-
   if (array_key_exists('url', $link_settings)) {
     $attributes['href'] = $link_settings['url'];
 
@@ -35,12 +32,5 @@ $text_link = function(string $content = '', array $link_settings = [], string $c
     $attributes['href'] = "tel:{$link_settings['phone']}";
   }
 
-  if (empty($class) == false) {
-    $attributes['class'] .= " {$class}";
-    $attributes['class'] = explode(' ', $attributes['class']);
-    sort($attributes['class']);
-    $attributes['class'] = trim(implode(' ', $attributes['class']));
-  }
-
-  return $element('a', $content, '', $id, $attributes);
+  return $element('a', $content, $attributes, $component);
 };

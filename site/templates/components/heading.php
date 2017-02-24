@@ -9,14 +9,16 @@
  *
  * @param string  $content     HTML or Text content.
  * @param integer $headingType HTML heading level.
- * @param string  $class       CSS classnames.
- * @param string  $id          HTML identifier.
  * @param array   $attributes  HTML attributes.
+ * @param array   $component   Component name.
  *
  * @return string Rendered HTML of the component.
  */
 
-$heading = function(string $content = 'Heading', int $headingType = 1, string $class = '', string $id = '', array $attributes = []) use ($element)
+$heading = function(string $content = 'Heading', int $headingType = 1, array $attributes = [], string $component = 'heading') use ($element)
 {
-  return $element("h{$headingType}", $content, $class, $id, $attributes);
+  $class = ['class' => ' lh-title'];
+  $attributes = array_merge($class, $attributes);
+
+  return $element("h{$headingType}", $content, $attributes, $component);
 };

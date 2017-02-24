@@ -12,17 +12,17 @@
  * @param string  $content      HTML or Text content.
  * @param bool    $ordered      List type: ordered/unordered
  * @param bool    $bullets      Bullets: on/off
- * @param string  $class        CSS classnames.
- * @param string  $id           HTML identifier.
  * @param array   $attributes   HTML attributes.
+ * @param array   $component    Component name.
  *
  * @return string Rendered HTML of the component.
  */
 
-$list = function(string $content = '', bool $ordered = false, bool $bullets = true, string $class = '', string $id = '', array $attributes = []) use ($element)
+$list = function(string $content = '', bool $ordered = false, bool $bullets = true, array $attributes = [], string $component = 'list') use ($element)
 {
   if ($bullets == false) {
-    $class .= ' list pl0';
+    $classes = ['class' => ' list pl0'];
+    $attributes = array_merge($classes, $attributes);
   }
 
   // Ensure only List Item components or raw LI elements are used
@@ -36,5 +36,5 @@ $list = function(string $content = '', bool $ordered = false, bool $bullets = tr
     }
   }
 
-  return $element($ordered ? 'ol' : 'ul', $content, $class, $id, $attributes);
+  return $element($ordered ? 'ol' : 'ul', $content, $attributes, $component);
 };

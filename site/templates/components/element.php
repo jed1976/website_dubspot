@@ -2,16 +2,15 @@
 /**
  * An element component used to house other content.
  *
- * @param string $tag         HTML tagname.
- * @param string $content     HTML or Text content.
- * @param string $class       CSS classnames.
- * @param string $id          HTML identifier.
- * @param array  $attributes  HTML attributes.
+ * @param string  $tag          HTML tagname.
+ * @param string  $content      HTML or Text content.
+ * @param array   $attributes   HTML attributes.
+ * @param array   $component    Component name.
  *
  * @return string Rendered HTML of the component.
  */
 
-$element = function(string $tag, string $content = '', string $class = '', string $id = '', array $attributes = [])
+$element = function(string $tag = 'div', string $content = '', array $attributes = [], string $component = 'component')
 {
   $tags = [
     'a', 'address', 'article', 'aside', 'audio',
@@ -33,35 +32,38 @@ $element = function(string $tag, string $content = '', string $class = '', strin
   sort($tags);
 
   if (in_array($tag, $tags, true) == false) {
-    trigger_error('$tag property must be any of these: '.implode(', ', $tags), E_USER_ERROR);
+    trigger_error('Tag property must be one of the following: '.implode(', ', $tags), E_USER_ERROR);
   }
 
-  $html = "<{$tag}";
+  $opening_tag      = "<{$tag}";
+  $flat_attributes  = '';
+  $closing_tag      = "</{$tag}>";
+  $hook             = "hook_{$component}";
 
-  if (empty($class) == false) {
-    $attributes['class'] = trim($class);
+  if (array_key_exists('class', $attributes)) {
+    $values = explode(' ', trim($attributes['class']));
+    $attributes['class'] = array_combine($values, $values);
+  } else {
+    $attributes['class'] = [];
   }
 
-  if (empty($id) == false) {
-    $attributes['id'] = $id;
+  if (function_exists($hook)) {
+    $attributes = call_user_func($hook, $attributes);
   }
 
-  ksort($attributes);
+  sort($attributes['class']);
+
+  if (array_key_exists('class', $attributes)) {
+    $attributes['class'] = implode(' ', $attributes['class']);
+  }
 
   foreach ($attributes as $attribute => $value) {
-    $html .= ' '.$attribute.'="'.(string)$value.'"';
+    $flat_attributes .= ' '.$attribute.'="'.trim($value).'"';
   }
 
-  $html .= ">{$content}";
-
-  switch ($tag)
-  {
-    case 'img':
-    break;
-
-    default:
-      $html .= "</{$tag}>";
+  if ($tag == 'img') {
+      $closing_tag = '';
   }
 
-  return trim($html);
+  return trim("{$opening_tag}{$flat_attributes}>{$content}{$closing_tag}");
 };

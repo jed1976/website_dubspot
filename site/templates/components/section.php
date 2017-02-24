@@ -6,15 +6,14 @@
  * It's perfect for full-screen background images, videos,
  * and other content.
  *
- * @param string $content     HTML or Text content.
- * @param string $class       CSS classnames.
- * @param string $id          HTML identifier.
- * @param array  $attributes  HTML attributes.
+ * @param string  $content     HTML or Text content.
+ * @param array   $attributes  HTML attributes.
+ * @param array   $component   Component name.
  *
  * @return string Rendered HTML of the component.
  */
 
-$section = function(string $content = '', string $class = '', string $id = '', array $attributes = []) use ($element)
+$section = function(string $content = '', array $attributes = [], string $component = 'section') use ($element)
 {
-  return $element('section', $content, $class, $id, $attributes);
+  return $element('section', $content, $attributes, $component);
 };

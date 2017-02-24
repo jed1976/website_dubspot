@@ -1,3 +1,10 @@
+<?php
+// Page Meta
+$title = $page->meta_title ? $page->meta_title : $page->title;
+$description = $page->meta_description ? $page->meta_description : '';
+$open_graph_title = $page->open_graph_title && !$page->open_graph_title_same ? $page->open_graph_title : $title;
+$open_graph_description = $page->open_graph_description && !$page->open_graph_description_same ? $page->open_graph_description : $description;
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -50,6 +57,7 @@
     <!-- Styles -->
     <link href="<?= $urls->templates ?>styles/main.css" rel="stylesheet">
     <link href="<?= $urls->templates ?>styles/tachyons/css/tachyons.min.css" rel="stylesheet">
+    <link href="<?= $urls->templates.$settings->theme->directory ?>styles/main.css" rel="stylesheet">
 
     <!-- Icons -->
     <link rel="shortcut icon" href="<?= $settings->favicon->url ?>" type="image/x-icon">

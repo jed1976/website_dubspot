@@ -8,14 +8,13 @@
  * @param string  $source       Source path/url.
  * @param bool    $hi_dpi       Image is Retina/HiDPI.
  * @param string  $alt          Alternate text.
- * @param string  $class        CSS classnames.
- * @param string  $id           HTML identifier.
  * @param array   $attributes   HTML attributes.
+ * @param array   $component    Component name.
  *
  * @return string Rendered HTML of the component.
  */
 
-$image = function(string $source, bool $hi_dpi = false, string $alt = '', string $class = '', string $id = '', array $attributes = []) use ($element)
+$image = function(string $source, bool $hi_dpi = false, string $alt = '', array $attributes = [], string $component = 'image') use ($element)
 {
   $attributes['alt'] = $alt;
   $attributes['src'] = $source;
@@ -34,5 +33,5 @@ $image = function(string $source, bool $hi_dpi = false, string $alt = '', string
       $attributes['width'] = (int)($size[0] / 2);
   }
 
-  return $element('img', '', $class, $id, $attributes);
+  return $element('img', '', $attributes, $component);
 };

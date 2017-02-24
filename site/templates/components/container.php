@@ -6,16 +6,15 @@
  * smaller devices (like phones and tablets), they
  * extend across the full width of the screen.
  *
- * @param string $content     HTML or Text content.
- * @param string $tag         HTML tagname.
- * @param string $class       CSS classnames.
- * @param string $id          HTML identifier.
- * @param array  $attributes  HTML attributes.
+ * @param string  $content     HTML or Text content.
+ * @param string  $tag         HTML tagname.
+ * @param array   $attributes  HTML attributes.
+ * @param array   $component   Component name.
  *
  * @return string Rendered HTML of the component.
  */
 
-$container = function(string $content = '', string $tag = 'div', string $class = '', string $id = '', array $attributes = []) use ($element)
+$container = function(string $content = '', string $tag = 'div', array $attributes = [], string $component = 'container') use ($element)
 {
   $tags = [
     'address', 'article', 'aside',
@@ -33,7 +32,8 @@ $container = function(string $content = '', string $tag = 'div', string $class =
     trigger_error('$tag property must be any of these: '.implode(', ', $tags), E_USER_ERROR);
   }
 
-  $class .= ' center mw8 bg-gray';
+  $classes = ['class' => ' center mw8 bg-gray'];
+  $attributes = array_merge($classes, $attributes);
 
-  return $element($tag, $content, $class, $id, $attributes);
+  return $element($tag, $content, $attributes, $component);
 };

@@ -4,14 +4,13 @@
  * third-party site (such as YouTube or Vimeo) via its URL.
  *
  * @param string  $url          Video URL.
- * @param string  $class        CSS classnames.
- * @param string  $id           HTML identifier.
  * @param array   $attributes   HTML attributes.
+ * @param array   $component    Component name.
  *
  * @return string Rendered HTML of the component.
  */
 
-$video = function(string $url, string $class = '', string $id = '', array $attributes = []) use ($element)
+$video = function(string $url, array $attributes = [], string $component = 'video') use ($element)
 {
   // YouTube/Vimeo Parsing Code: https://github.com/ryancramerdesign/TextformatterVideoEmbed/blob/master/TextformatterVideoEmbed.module
 
@@ -33,11 +32,12 @@ $video = function(string $url, string $class = '', string $id = '', array $attri
   }
 
   return $element('div',
-    $element('iframe', '', 'aspect-ratio--object', '', [
+    $element('iframe', '', [
       'allowFullScreen'       => '',
+      'class'                 => 'aspect-ratio--object',
       'frameborder'           => 0,
       'mozallowfullscreen'    => '',
       'src'                   => $source,
       'webkitAllowFullScreen' => ''
-    ]), 'aspect-ratio aspect-ratio--16x9');
+    ]), ['class' => 'aspect-ratio aspect-ratio--16x9'], $component);
 };
