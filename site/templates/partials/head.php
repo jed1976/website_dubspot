@@ -3,29 +3,35 @@
   <head>
     <!-- Meta -->
     <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <meta content="<?= $settings->twitter_account_id ?>" property="twitter:account_id" >
-    <meta content="<?= $settings->revisit_after_period ?>" name="revisit-after">
-    <meta content="Copyright <?= date('Y') ?> Dubspot, DS14, Inc. All logos and trademarks are property of their respective owners." name="copyright">
+    <meta name="copyright" content="Copyright <?= date('Y') ?> Dubspot, DS14, Inc. All logos and trademarks are property of their respective owners.">
+    <meta name="revisit-after" content="<?= $settings->revisit_after_period ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- SEO Meta -->
     <title><?= $title ?></title>
-    <meta content="<?= $description ?>" name="description">
-    <link href="<?= $page->httpUrl ?>" rel="canonical">
+    <meta name="description" content="<?= $description ?>">
 
-    <!-- Open Graph Data -->
-    <meta property="og:title" content="<?= $open_graph_title ?>">
-    <meta name="og:url" content="<?= $page->httpUrl ?>">
-    <meta name="og:type" content="website">
-    <meta property="og:description" content="<?= $open_graph_description ?>">
-    <? if ($page->open_graph_image): ?><meta property="og:image" content="<?= $page->open_graph_image->url ?>"><? endif ?>
+    <!-- Schema.org markup for Google+ -->
+    <meta itemprop="name" content="<?= $open_graph_title ?>">
+    <meta itemprop="description" content="<?= $open_graph_description ?>">
+    <? if ($page->open_graph_image): ?><meta itemprop="image" content="<?= $page->open_graph_image->url ?>"><? endif ?>
 
-    <!-- Twitter Card -->
+    <!-- Twitter Card data -->
     <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@Dubspot">
     <meta name="twitter:title" content="<?= $open_graph_title ?>">
     <meta name="twitter:description" content="<?= $open_graph_description ?>">
     <meta name="twitter:url" content="<?= $page->httpUrl ?>">
     <? if ($page->open_graph_image): ?><meta property="twitter:image" content="<?= $page->open_graph_image->url ?>"><? endif ?>
+    <meta property="twitter:account_id" content="<?= $settings->twitter_account_id ?>">
+
+    <!-- Open Graph data -->
+    <meta property="og:title" content="<?= $open_graph_title ?>">
+    <meta property="og:url" content="<?= $page->httpUrl ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="<?= $open_graph_description ?>">
+    <meta property="og:site_name" content="<?= $settings->website_name ?>">
+    <? if ($page->open_graph_image): ?><meta property="og:image" content="<?= $page->open_graph_image->url ?>"><? endif ?>
 
     <? if ($config->debug == false): ?>
     <!-- Google Analytics -->
@@ -43,15 +49,18 @@
 
     <!-- Styles -->
     <link href="<?= $urls->templates ?>styles/main.css" rel="stylesheet">
-    <link href="<?= $urls->templates ?>styles/tachyons.min.css" rel="stylesheet">
+    <link href="<?= $urls->templates ?>styles/tachyons/css/tachyons.min.css" rel="stylesheet">
 
     <!-- Icons -->
-    <link href="<?= $settings->favicon->url ?>" rel="icon">
-    <link href="<?= $settings->webclip->url ?>" rel="apple-touch-icon">
+    <link rel="shortcut icon" href="<?= $settings->favicon->url ?>" type="image/x-icon">
+    <link rel="apple-touch-icon" href="<?= $settings->webclip->url ?>">
+
+    <!-- Links -->
+    <link rel="canonical" href="<?= $page->httpUrl ?>">
   </head>
-  <body class="bg-black helvetica white">
+  <body class="helvetica">
     <nav>
       <a class="dib fixed right-1 right-2-ns top-1 top-2-ns w3 white z-999" href="/"><?= ds_svg('title=Dubspot Circle') ?></a>
     </nav>
 
-    <main class="mv5">
+    <main role="main">

@@ -3,8 +3,43 @@
 .bg-ds-yellow { background-color: #fff440; }
 .ds-yellow { color: #fff440; }
 
+/* Cursors */
+.c-alias { cursor: alias; }
+.c-cell { cursor: cell; }
+.c-col-resize { cursor: col-resize; }
+.c-copy { cursor: copy; }
+.c-context-menu { cursor: context-menu; }
+.c-crosshair { cursor: crosshair; }
+.c-default { cursor: default; }
+.c-e-resize { cursor: e-resize; }
+.c-ew-resize { cursor: ew-resize; }
+.c-grab { cursor: -webkit-grab; cursor: grab; }
+.c-grabbing { cursor: -webkit-grabbing; cursor: grabbing; }
+.c-help { cursor: help; }
+.c-move { cursor: move; }
+.c-n-resize { cursor: n-resize; }
+.c-ne-resize { cursor: ne-resize; }
+.c-nesw-resize { cursor: nesw-resize; }
+.c-none { cursor: none; }
+.c-not-allowed { cursor: not-allowed; }
+.c-ns-resize { cursor: ns-resize; }
+.c-nw-resize { cursor: nw-resize; }
+.c-nwse-resize { cursor: nwse-resize; }
+.c-pointer { cursor: pointer; }
+.c-progress { cursor: progress; }
+.c-row-resize { cursor: row-resize; }
+.c-s-resize { cursor: s-resize; }
+.c-se-resize { cursor: se-resize; }
+.c-sw-resize { cursor: sw-resize; }
+.c-text { cursor: text; }
+.c-vertical-text { cursor: vertical-text; }
+.c-w-resize { cursor: w-resize; }
+.c-wait { cursor: wait; }
+.c-zoom-in { cursor: zoom-in; }
+.c-zoom-out { cursor: zoom-out; }
+
 /* Scroll */
-.touch-scroll
+.overflow-scrolling-touch
 {
   -moz-overflow-scrolling: touch;
   -ms-overflow-scrolling: touch;

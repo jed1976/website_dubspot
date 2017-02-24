@@ -8,7 +8,7 @@ $combination_programs = $pages->find('template=combination-program, sort=sort');
 <? if ($combination_programs): ?>
 <!--<h2 class="b f3 mb3 mh3 mh4-ns">Combination Programs</h2>-->
 
-<ol class="list ma0 nowrap overflow-x-auto ph3 ph4-ns touch-scroll">
+<ol class="list ma0 nowrap overflow-scrolling-touch overflow-x-auto ph3 ph4-ns">
   <? foreach ($combination_programs as $key => $item): ?>
   <li class="dib w-100 w-60-m w-33-l <? if ($key != $combination_programs->count - 1): ?> mr3<? endif ?>">
     <a class="link white" href="<?= $item->url ?>">
