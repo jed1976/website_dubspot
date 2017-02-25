@@ -1,10 +1,6 @@
 <?php
-// function hook_heading($attributes)
-// {
-//   unset($attributes['class']['lh-title']);
-//
-//   $attributes['class'][] = 'lh-copy';
-//   $attributes['class'][] = 'bg-red';
 
-//   return $attributes;
-// };
+function hook_h1(array $attributes)
+{
+  return array_merge($attributes, ['bg-blue', 'f1', 'mb4', 'white']);
+}

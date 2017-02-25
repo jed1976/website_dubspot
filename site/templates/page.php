@@ -1,3 +1,4 @@
-<? include "partials/head.php" ?>
+<?php
+include "partials/head.php";
 
-<? include "partials/foot.php" ?>
+include "partials/foot.php";

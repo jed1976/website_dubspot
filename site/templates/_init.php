@@ -4,41 +4,19 @@
 $settings = $pages->get('template=settings');
 
 // Includes
-include 'functions.php';
+include '_functions.php';
+include '_elements.php';
 
-// Components
-include 'components/element.php';
+// // Components
+include '_components/media.php';
+include '_components/map.php';
 
-  //-- Layout
-  include 'components/section.php';
-  include 'components/container.php';
-
-  //-- Typography
-  include 'components/heading.php';
-  include 'components/paragraph.php';
-  include 'components/text_link.php';
-  include 'components/link_block.php';
-  include 'components/list.php';
-  include 'components/list_item.php';
-  include 'components/button.php';
-  include 'components/text_block.php';
-  include 'components/block_quote.php';
-
-  //-- Media
-  include 'components/image.php';
-  include 'components/media.php';
-  include 'components/map.php';
-
-  //-- Forms
-  include 'components/label.php';
-  include 'components/input.php';
-  include 'components/checkbox.php';
-  include 'components/radio_button.php';
-  include 'components/text_area.php';
-
-
-
-
-// Theme
+// Theme Components
 include $settings->theme->directory.'hooks.php';
 include $settings->theme->directory.'components.php';
+
+// Page Variables
+$page->title            = $page->meta_title ? $page->meta_title : $page->title;
+$page->meta_description = $page->meta_description ? $page->meta_description : '';
+$open_graph_title       = $page->open_graph_title && !$page->open_graph_title_same ? $page->open_graph_title : $page->title;
+$open_graph_description = $page->open_graph_description && !$page->open_graph_description_same ? $page->open_graph_description : $page->meta_description;

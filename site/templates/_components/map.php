@@ -20,7 +20,7 @@ $map = function(
   string $map_type = 'roadmap',
   bool $disable_scrolling = false,
   array $attributes = [],
-  string $component = 'map') use ($element)
+  string $component = 'map') use ($iframe)
 {
   $map_types = ['roadmap', 'satellite'];
   sort($map_types);
@@ -40,5 +40,5 @@ $map = function(
   $attributes['frameborder'] = 0;
   $attributes['src'] = "//www.google.com/maps/embed/v1/view?center={$center}&key={$api_key}&maptype={$map_type}&zoom={$zoom}";
 
-  return $element('iframe', '', $attributes, $component);
+  return $iframe($attributes);
 };

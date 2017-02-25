@@ -32,7 +32,7 @@
  * @return string Rendered HTML of the component.
  */
 
-$media = function(string $url, array $attributes = []) use ($element)
+$media = function(string $url, array $attributes = [])
 {
   $Essence = new Essence\Essence();
   $media = $Essence->extract($url, ['maxwidth'  => 1024]);
