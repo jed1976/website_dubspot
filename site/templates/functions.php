@@ -5,8 +5,9 @@
  * @param $selector string
  * @return mixed
  */
-function ds_image_path($selector = '') {    
-  return wire('pages')->get('template=image, '.$selector)->image->url;  
+function ds_image_path($selector = '')
+{
+  return wire('pages')->get('template=image, '.$selector)->image->url;
 }
 
 /**
@@ -15,6 +16,7 @@ function ds_image_path($selector = '') {
  * @param $selector string
  * @return mixed
  */
-function ds_svg($selector = '') {      
+function ds_svg($selector = '')
+{
     return file_get_contents(wire('config')->paths->root.wire('pages')->get('template=image, '.$selector)->image->url);
 }

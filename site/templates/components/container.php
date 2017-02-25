@@ -29,10 +29,10 @@ $container = function(string $content = '', string $tag = 'div', array $attribut
   sort($tags);
 
   if (in_array($tag, $tags, true) == false) {
-    trigger_error('$tag property must be any of these: '.implode(', ', $tags), E_USER_ERROR);
+    trigger_error('Tag property must be one of the following: '.implode(', ', $tags), E_USER_ERROR);
   }
 
-  $classes = ['class' => ' center mw8 bg-gray'];
+  $classes = ['class' => ' center mw8'];
   $attributes = array_merge($classes, $attributes);
 
   return $element($tag, $content, $attributes, $component);

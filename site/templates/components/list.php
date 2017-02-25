@@ -27,12 +27,15 @@ $list = function(string $content = '', bool $ordered = false, bool $bullets = tr
 
   // Ensure only List Item components or raw LI elements are used
   $dom = new DOMDocument();
-  $dom->loadHTML($content, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED); // Ensure no DTD/HTML elements are added automatically
-  $nodes = $dom->getElementsByTagName('*');
 
-  foreach ($nodes as $node) {
-    if ($node->tagName != 'li') {
-      trigger_error('The List component can only contain List Item components or raw LI elements.', E_USER_ERROR);
+  // Ensure no DTD/HTML elements are added automatically
+  // TODO: Look into why we must pass in an empty element '<i>' in order for the parser to properly
+  // recognize the first LI node.
+  $dom->loadHTML('<i>'.$content, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED);
+
+  foreach ($dom->documentElement->childNodes as $node) {
+    if ($node->nodeName != 'li') {
+      trigger_error("The List component can only contain List Item components or raw LI elements. {$node->nodeName} was given.", E_USER_ERROR);
     }
   }
 

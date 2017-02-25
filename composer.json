@@ -15,7 +15,8 @@
   ],
   "require": {
     "php": ">=5.3.8",
-    "ext-gd": "*"
+    "ext-gd": "*",
+    "essence/essence": "^3.3"
   },
   "autoload": {
     "files": [ "wire/core/ProcessWire.php" ]

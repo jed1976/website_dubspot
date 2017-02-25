@@ -38,6 +38,12 @@
 .c-zoom-in { cursor: zoom-in; }
 .c-zoom-out { cursor: zoom-out; }
 
+/* iFrame */
+iframe { height: 100%; width: 100%; }
+
+/* Pointer Events */
+.pointer-events-none { pointer-events: none; }
+
 /* Scroll */
 .overflow-scrolling-touch
 {

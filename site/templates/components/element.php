@@ -10,7 +10,11 @@
  * @return string Rendered HTML of the component.
  */
 
-$element = function(string $tag = 'div', string $content = '', array $attributes = [], string $component = 'component')
+$element = function(
+  string $tag = 'div',
+  string $content = '',
+  array $attributes = [],
+  string $component = 'component')
 {
   $tags = [
     'a', 'address', 'article', 'aside', 'audio',
@@ -18,13 +22,14 @@ $element = function(string $tag = 'div', string $content = '', array $attributes
     'div',
     'figure', 'footer',
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header',
-    'iframe', 'img',
-    'li',
+    'iframe', 'img', 'input',
+    'label', 'li',
     'main',
     'nav',
     'ol',
     'p',
     'section',
+    'textarea',
     'ul',
     'video',
   ];
@@ -53,6 +58,10 @@ $element = function(string $tag = 'div', string $content = '', array $attributes
 
   sort($attributes['class']);
 
+  if (count($attributes['class']) == 0) {
+    unset($attributes['class']);
+  }
+
   if (array_key_exists('class', $attributes)) {
     $attributes['class'] = implode(' ', $attributes['class']);
   }
@@ -61,7 +70,7 @@ $element = function(string $tag = 'div', string $content = '', array $attributes
     $flat_attributes .= ' '.$attribute.'="'.trim($value).'"';
   }
 
-  if ($tag == 'img') {
+  if ($tag == 'img' || $tag == 'input') {
       $closing_tag = '';
   }
 
