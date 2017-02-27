@@ -1,24 +1,32 @@
-<? include "partials/head.php" ?>
-<?
-$combination_programs = $pages->find('template=combination-program, sort=sort');
-?>
+<?php
+namespace DS;
+use DS\Components as cmp;
 
-<h1 class="b--gray bb f1 lh-title mb0 mh3 mh4-ns pb2 pb3-ns"><?= $page->title ?></h1>
+// Data
+$combination_programs = $pages->find('template=product, product_type=1, sort=sort');
 
-<? if ($combination_programs): ?>
-<!--<h2 class="b f3 mb3 mh3 mh4-ns">Combination Programs</h2>-->
+print(
 
-<ol class="list ma0 nowrap overflow-scrolling-touch overflow-x-auto ph3 ph4-ns">
-  <? foreach ($combination_programs as $key => $item): ?>
-  <li class="dib w-100 w-60-m w-33-l <? if ($key != $combination_programs->count - 1): ?> mr3<? endif ?>">
-    <a class="link white" href="<?= $item->url ?>">
-      <h3 class="ds-yellow f6 fw4 mb0 tracked ttu">Combination Program</h3>
-      <h2 class="b f4 f3-l mv3 ws-normal"><?= $item->title ?></h2>
-      <div class="bg-gray h5"></div>
-    </a>
-  </li>
-  <? endforeach ?>
-</ol>
-<? endif ?>
+  div(['data-pw-id'=>'content'],
+    h1(['class'=>'b--gray bb f1 lh-title mb4 mh3 mh4-ns mt3 mt4-ns pb3'], $page->title).
 
-<? include "partials/foot.php" ?>
+    // Combination Programs
+    ($combination_programs === false ? '' :
+      ol(['class'=>'list ma0 nowrap overflow-scrolling-touch overflow-x-auto pb4 ph3 ph4-ns'],
+        $combination_programs->each(function($item) use ($combination_programs) {
+          return
+            li(['class'=>'dib w-90 w-60-m w-33-l '.($item === $combination_programs->last() ? '' : 'mr3')],
+              a(['class'=>'link white', 'href'=>'{url}'],
+                h4(['class'=>'ds-yellow f7 fw3 lh-title mb1 tracked ttu'], 'Combination Program').
+                h2(['class'=>'f4 fw4 lh-title mb1 mt0 truncate w-100'], '{title}').
+                h3(['class'=>'f4 fw4 gray lh-title mb3 mt0'], 'NYC / LA').
+                cmp\aspect_ratio(div(['class' => 'bg-gray h-100']))
+              )
+            );
+        })
+      )
+    )
+
+  )
+
+);

@@ -1,18 +1,19 @@
 <?php
-define('CONTENT',
-  $h1('Hello').
+namespace DS;
+use DS\Components as cmp;
 
-  $h2('Hello 2').
+print(
 
-  $img(['class' => 'w5', 'src' => $urls->assets.'files/1059/dan-freeman.jpg', 'title' => 'Dan Freeman']).
+  div(['data-pw-id' => 'content'],
+    cmp\container(
+      h1(['class' => 'yellow fw3 ttu'], 'Hello.').
 
-  $comment('Hello!')
+      img(['src' => $urls->assets.'files/1059/dan-freeman.jpg', 'title' => 'Dan Freeman']).
 
-  // $div(['class' => 'aspect-ratio aspect-ratio--16x9'],
-  //   $div(['class' => 'aspect-ratio--object'],
-  //     $media('https://vimeo.com/147170777')
-  //   )
-  // )
+      cmp\aspect_ratio('16x9',
+        cmp\media('https://www.youtube.com/watch?v=APiSNBkyD5Y')
+      )
+    )
+  )
+
 );
-
-include '_main.php';

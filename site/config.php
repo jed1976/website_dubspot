@@ -96,3 +96,5 @@ $config->httpHosts = array('dubspot.dev');
  * Template helpers
  */
 $config->prependTemplateFile  = '_init.php';
+$config->appendTemplateFile   = '_main.php';
+$config->useMarkupRegions     = true;

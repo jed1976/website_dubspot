@@ -1,4 +1,5 @@
-<?php
+<?php namespace DS\Components;
+
 /**
  * A Media element lets you embed many types of content hosted on a
  * third-party site (such as YouTube, SoundCloud, Spotify, etc.) via its URL.
@@ -32,9 +33,9 @@
  * @return string Rendered HTML of the component.
  */
 
-$media = function(string $url, array $attributes = [])
+function media(string $url, array $attributes = [])
 {
-  $Essence = new Essence\Essence();
+  $Essence = new \Essence\Essence();
   $media = $Essence->extract($url, ['maxwidth'  => 1024]);
 
   if ($media) {

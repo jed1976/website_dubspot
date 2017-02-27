@@ -1,2 +1,2 @@
 <?php
-#include 'components/test.php';
+#include 'components/custom.php';
