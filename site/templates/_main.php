@@ -53,8 +53,8 @@ print(
         ($config->debug == false ? script($settings->google_analytics_code) : '').
 
         // Styles
-        link(['href'=>$urls->templates.'styles/main.css', 'rel'=>'stylesheet']).
         link(['href'=>$urls->templates.'styles/tachyons/css/tachyons.min.css', 'rel'=>'stylesheet']).
+        link(['href'=>$urls->templates.'styles/main.css', 'rel'=>'stylesheet']).
         style(['id'=>'style-block']).
 
         // Icons
@@ -66,38 +66,38 @@ print(
       ).
       body(['class'=>'bg-black helvetica white', 'data-pw-id'=>'html-body'],
         nav(
-          a(['class'=>'dib fixed right-1 right-2-ns top-1 top-2-ns w3 white z-999', 'href'=>'/'],
+          a(['class'=>'dib fixed link right-1 right-2-ns top-1 top-2-ns w3 white z-999', 'href'=>'/'],
             svg_image('title=Dubspot Circle')
           )
         ).
 
         main(['data-pw-id'=>'content', 'role'=>'main']).
 
-        footer(['class'=>'bg-white-10 pa3 pa4-l'],
+        footer(['class'=>'b--gray bt pa3 pa4-l'],
           div(['class'=>'cf mb4-l'],
             h6(['class'=>'f6 fw4 fl gray pv0 mb4 tracked ttu w-100'], 'Locations').
             $locations->each(function($location) {
               return
-                article(['class'=>'dib-ns fl mb4 mr4-m mr5-l pr0-ns pr2 w-auto-ns w-50'],
+                article(['class'=>'dib-ns fl mb4 mr6-ns pr0-ns pr2 w-auto-ns w-50'],
                   h4(['class'=>'f4-l f5 fw6'], $location->abbreviation).
                   span(['class'=>'db f6-l f7 lh-copy'], $location->street_address).
                   span(['class'=>'db f6-l f7 lh-copy'], "{$location->city}, {$location->state->value} $location->zip_code").
-                  a(['class'=>'db dim ds-yellow f6 fw6 link pv3', 'href'=>"tel:+{$location->phone_number}", 'title'=>''], "+{$location->phone_number}")
+                  a(['class'=>'dib f6 fw6 pv3 text-link', 'href'=>"tel:+{$location->phone_number}", 'title'=>''], "+{$location->phone_number}")
                 );
             })
           ).
           section(['class'=>'cf mb5'],
             div(['class'=>'fr mb0-ns mb4 w-50-l w-100'],
-              a(['class'=>'dib dim ds-yellow f2-ns f3 fw6 link mb0-l mb4 mt2 pv3 tl', 'href'=>"mailto:{$admissions->email}"], "{$admissions->email}")
+              a(['class'=>'dib f2-ns f3 fw6 mb0-l mb4 mt2 pv3 text-link tl', 'href'=>"mailto:{$admissions->email}"], "{$admissions->email}")
             ).
             div(['class'=>'fl mb0-ns mb4 w-50-l w-100'],
-              p(['class'=>'f6 fw4 gray lh-copy mb2 measure mt0'], 'Subscribe to our newsletter for the latest music courses, events and current school updates.').
-              input(['class'=>'bg-black bn border-box br0 f5 input-reset mw-100 pa3 w-100 w5-ns white', 'placeholder'=>'Email Address']).
+              p(['class'=>'f6 fw7 gray lh-copy mb2 measure mt0'], 'Sign up for our newsletter.').
+              input(['class'=>'b--gray ba bg-transparent border-box br0 f5 input-reset mw-100 pa3 w-100 w5-ns white', 'placeholder'=>'Email Address']).
               input(['class'=>'bg-ds-yellow black bn br0 f5 input-reset ph4 pointer pv2 pv3-ns w-100 w-auto-ns', 'type'=>'submit', 'value'=>'Sign Up'])
             )
           ).
-          div(['class'=>'dt dt--fixed w-100'],
-            div(['class'=>'db dtc-ns pb3 pb0-ns tc tl-ns v-mid2'],
+          div(['class'=>'cf'],
+            div(['class'=>'fr pb3 pb0-ns tc tr-ns v-mid w-50-ns w-100'],
               $social_links->each(function($social_link) {
                 return
                   a(['class'=>'dib dim gray h2 link mh2 v-mid w2', 'href'=>$social_link->url_address, 'title'=>"Visit our {$social_link->title} page."],
@@ -105,7 +105,7 @@ print(
                   );
               })
             ).
-            div(['class'=>'db dtc-ns tc tr-ns v-mid'],
+            div(['class'=>'fl tc tl-ns v-mid w-50-ns w-100'],
               p(['class'=>'dib f6 gray mb3 pr3'], $copyright)
             )
           )

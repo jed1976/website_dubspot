@@ -32,7 +32,7 @@ print(
                 h5(['class'=>'ds-yellow f7 fw3 lh-title mb1 tracked ttu'], $featured_product->product_type->title).
                 h2(['class'=>'f3-ns f4 fw4 lh-title mb1 mt0 truncate w-100'], '{title}').
                 h6(['class'=>'f3-ns f4 fw4 gray lh-title mb2 mt0'], $locations).
-                cmp\aspect_ratio(div(['class'=>'bg-gray h-100']))
+                cmp\aspect_ratio(div(['class'=>'bg-dark-gray grow h-100']))
               )
             );
         })
@@ -54,7 +54,7 @@ print(
               ).
               h2(['class'=>'dtc f3-ns f4 fw7 mt0 pl2 v-mid'], '{title}').
               div(['class'=>'dtc tr v-mid w3'],
-                a(['class'=>'ds-yellow link', 'href'=>$item->url, 'title'=>'See all {title} courses'], 'See All')
+                a(['class'=>'link text-link', 'href'=>$item->url, 'title'=>'See all {title} courses'], 'See All')
               )
             )
           ).
@@ -68,7 +68,7 @@ print(
                 li(['class'=>'dib w5 '.($program === $programs->last() ? '' : 'mr3')],
                   a(['class'=>'link white', 'href'=>$program->url],
                     cmp\aspect_ratio(
-                      div(['class'=>'bg-gray grow h-100'])
+                      div(['class'=>'bg-dark-gray grow h-100'])
                     ).
                     h3(['class'=>'f6 fw4 mb1 mt2 lh-title truncate w-100'], $program->title).
                     h6(['class'=>'f6 fw4 gray lh-title mb0 mt0'], $locations)

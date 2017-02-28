@@ -1,7 +1,11 @@
 /* Colors */
-.b--ds-yellow { border-color: #fff440; }
-.bg-ds-yellow { background-color: #fff440; }
-.ds-yellow { color: #fff440; }
+.b--ds-yellow { border-color: #fff44e; }
+.bg-ds-yellow { background-color: #fff44e; }
+.ds-yellow { color: #fff44e; }
+
+.b--ds-green { border-color: #87c43c; }
+.bg-ds-green { background-color: #87c43c; }
+.ds-green { color: #87c43c; }
 
 /* Cursors */
 .c-alias { cursor: alias; }
@@ -40,6 +44,35 @@
 
 /* iFrame */
 iframe { height: 100%; width: 100%; }
+
+/* Links */
+.text-link:before {
+  background-color: #fff44e;
+  bottom: 0;
+  content: "";
+  height: 2px;
+  left: 0;
+  position: absolute;
+  transform: scaleX(0);
+  transition: all 0.15s ease-in-out 0s;
+  visibility: hidden;
+  width: 100%;
+}
+
+.text-link:hover:before {
+  transform: scaleX(1);
+  visibility: visible;
+}
+
+.text-link {
+  color: #fff44e;
+  position: relative;
+  text-decoration: none;
+}
+
+.text-link:hover {
+  cursor: pointer;
+}
 
 /* Pointer Events */
 .pointer-events-none { pointer-events: none; }
