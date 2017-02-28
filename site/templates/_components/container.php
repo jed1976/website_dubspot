@@ -4,7 +4,6 @@
  * A Container component has a fixed maximum width
  * and is centered on the page.
  *
- * @param string  $url      Aspect ratio.
  * @param string  $content  HTML or Text content.
  *
  * @return string Rendered HTML of the component.

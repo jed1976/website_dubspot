@@ -9,6 +9,7 @@ include '_functions.php';
 // Components
 include '_components/aspect_ratio.php';
 include '_components/container.php';
+include '_components/image.php';
 include '_components/map.php';
 include '_components/media.php';
 
