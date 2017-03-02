@@ -1,4 +1,5 @@
-<?php namespace DS;
+<?php
+namespace DS;
 
 // Data
 $seo_title              = $page->meta_title ? $page->meta_title : $page->title;
@@ -55,6 +56,20 @@ print(
         // Styles
         link(['href'=>$urls->templates.'styles/tachyons/css/tachyons.min.css', 'rel'=>'stylesheet']).
         link(['href'=>$urls->templates.'styles/main.css', 'rel'=>'stylesheet']).
+        style([], $settings->palette->each(function($palette) {
+          $color_name = str_replace('_', '-', $palette->color_name);
+          $color_value = $palette->color_value;
+
+          return "
+            .b--{$color_name} { border-color: {$color_value}; }
+            .bg-{$color_name} { background-color: {$color_value}; }
+            .{$color_name} { color: {$color_value}; }
+          ";
+        }).
+          ".text-link:before { background-color: ".DS_YELLOW."; }
+           .text-link { color: ".DS_YELLOW."; }"
+        ).
+
         style(['id'=>'style-block']).
 
         // Icons
@@ -64,21 +79,23 @@ print(
         // Links
         link(['rel'=>'canonical', 'href'=>$page->httpUrl])
       ).
-      body(['class'=>'bg-black helvetica white', 'data-pw-id'=>'html-body'],
+      body(['class'=>'bg-near-black helvetica white', 'data-pw-id'=>'html-body'],
         nav(
-          a(['class'=>'dib fixed link right-1 right-2-ns top-1 top-2-ns w3 white z-999', 'href'=>'/'],
+          a(['class'=>'dib fixed link right-1 right-2-ns top-1 w3 white z-999', 'href'=>'/'],
             svg_image('title=Dubspot Circle')
           )
         ).
 
+        // Main Content
         main(['data-pw-id'=>'content', 'role'=>'main']).
 
-        footer(['class'=>'b--gray bt pa3 pa4-l'],
+        // Footer
+        footer(['class'=>'b--ds-yellow bt bw3 cover pa3 pa4-l'],
           div(['class'=>'cf mb4-l'],
-            h6(['class'=>'f6 fw4 fl gray pv0 mb4 tracked ttu w-100'], 'Locations').
+            h6(['class'=>'f6 fw4 fl ds-gray pv0 mb4 tracked ttu w-100'], 'Locations').
             $locations->each(function($location) {
               return
-                article(['class'=>'dib-ns fl mb4 mr6-ns pr0-ns pr2 w-auto-ns w-50'],
+                article(['class'=>'dib-ns fl mb4 mr6-ns pr2 w-auto-ns w-50'],
                   h4(['class'=>'f4-l f5 fw6'], $location->abbreviation).
                   span(['class'=>'db f6-l f7 lh-copy'], $location->street_address).
                   span(['class'=>'db f6-l f7 lh-copy'], "{$location->city}, {$location->state->value} $location->zip_code").
@@ -87,26 +104,26 @@ print(
             })
           ).
           section(['class'=>'cf mb5'],
-            div(['class'=>'fr mb0-ns mb4 w-50-l w-100'],
-              a(['class'=>'dib f2-ns f3 fw6 mb0-l mb4 mt2 pv3 text-link tl', 'href'=>"mailto:{$admissions->email}"], "{$admissions->email}")
+            div(['class'=>'fr mb0-ns mb4 tc tr-l w-50-l w-100'],
+              a(['class'=>'dib f2-ns f3 fw6 mb0-l mb4 mt2 pv3 text-link', 'href'=>"mailto:{$admissions->email}"], "{$admissions->email}")
             ).
             div(['class'=>'fl mb0-ns mb4 w-50-l w-100'],
-              p(['class'=>'f6 fw7 gray lh-copy mb2 measure mt0'], 'Sign up for our newsletter.').
-              input(['class'=>'b--gray ba bg-transparent border-box br0 f5 input-reset mw-100 pa3 w-100 w5-ns white', 'placeholder'=>'Email Address']).
-              input(['class'=>'bg-ds-yellow black bn br0 f5 input-reset ph4 pointer pv2 pv3-ns w-100 w-auto-ns', 'type'=>'submit', 'value'=>'Sign Up'])
+              p(['class'=>'f6 fw7 lh-copy mb2 measure mt0'], 'Sign up for our newsletter.').
+              input(['class'=>'b--ds-yellow ba bg-transparent border-box br0 f5 input-reset mw-100 pa3 w-100 w5-ns white', 'placeholder'=>'Email Address']).
+              input(['class'=>'b--ds-yellow ba bg-ds-yellow black br0 f5 fw7 input-reset ph4 pointer pv2 pv3 ttu w-100 w-auto-ns', 'type'=>'submit', 'value'=>'Sign Up'])
             )
           ).
           div(['class'=>'cf'],
             div(['class'=>'fr pb3 pb0-ns tc tr-ns v-mid w-50-ns w-100'],
               $social_links->each(function($social_link) {
                 return
-                  a(['class'=>'dib dim gray h2 link mh2 v-mid w2', 'href'=>$social_link->url_address, 'title'=>"Visit our {$social_link->title} page."],
+                  a(['class'=>'dib dim ds-gray h2 link mh2 pointer v-mid w2', 'href'=>$social_link->url_address, 'title'=>"Visit our {$social_link->title} page."],
                     span(['class'=>'di v-btm lh-copy'], svg_image("title={$social_link->title}"))
                   );
               })
             ).
             div(['class'=>'fl tc tl-ns v-mid w-50-ns w-100'],
-              p(['class'=>'dib f6 gray mb3 pr3'], $copyright)
+              p(['class'=>'dib f6 ds-gray mb3 pr3'], $copyright)
             )
           )
         ).

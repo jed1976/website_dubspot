@@ -11,5 +11,5 @@
 
 function container(string $content = '')
 {
-  return \DS\div(['class' => 'center mw8'], $content);
+  return \DS\div(['class' => 'center mw9'], $content);
 };

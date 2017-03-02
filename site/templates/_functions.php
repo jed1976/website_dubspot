@@ -1,6 +1,7 @@
 <?php
 namespace DS;
 
+// HTML Elements
 
 /**
  * The base element function.
@@ -492,17 +493,6 @@ function iframe($attributes = [], $content = '')
 }
 
 /**
- * Returns an image path from a selector.
- *
- * @param $selector string
- * @return mixed
- */
-function image_path($selector = '')
-{
-  return \ProcessWire\wire('pages')->get('template=image, '.$selector)->image->url;
-}
-
-/**
  * HTML img.
  *
  * @param array   $attributes   HTML attributes.
@@ -800,20 +790,6 @@ function svg($attributes = [], $content = '')
 }
 
 /**
- * Returns inline SVG content from a selector.
- *
- * @param $selector string
- * @return mixed
- */
-function svg_image($selector = '')
-{
-    return file_get_contents(
-      \ProcessWire\wire('config')->paths->root.
-      \ProcessWire\wire('pages')->get('template=image, '.$selector)->image->url
-    );
-}
-
-/**
  * HTML table.
  *
  * @param array   $attributes   HTML attributes.
@@ -932,4 +908,44 @@ function ul($attributes = [], $content = '')
 function video($attributes = [], $content = '')
 {
   return element('video', $attributes, $content);
+}
+
+// Utilities
+
+/**
+ * Returns an image path from a selector.
+ *
+ * @param $selector string
+ * @return mixed
+ */
+function image_path($selector = '')
+{
+  return \ProcessWire\wire('pages')->get('template=image, '.$selector)->image->url;
+}
+
+/**
+ * Returns a Hex Color for the specified product.
+ *
+ * @param  $product   ProcessWire\Page Object
+ * @return mixed
+ */
+function product_color(\ProcessWire\Page $product)
+{
+  #if ($product->color != 'transparent') return $product->color;
+  #if ($product->disciplines->first->color != 'transparent') return $product->disciplines->first->color;
+  return DS_YELLOW;
+}
+
+/**
+ * Returns inline SVG content from a selector.
+ *
+ * @param $selector string
+ * @return mixed
+ */
+function svg_image($selector = '')
+{
+    return file_get_contents(
+      \ProcessWire\wire('config')->paths->root.
+      \ProcessWire\wire('pages')->get('template=image, '.$selector)->image->url
+    );
 }

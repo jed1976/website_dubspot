@@ -1,53 +1,8 @@
-/* Colors */
-.b--ds-yellow { border-color: #fff44e; }
-.bg-ds-yellow { background-color: #fff44e; }
-.ds-yellow { color: #fff44e; }
-
-.b--ds-green { border-color: #87c43c; }
-.bg-ds-green { background-color: #87c43c; }
-.ds-green { color: #87c43c; }
-
-/* Cursors */
-.c-alias { cursor: alias; }
-.c-cell { cursor: cell; }
-.c-col-resize { cursor: col-resize; }
-.c-copy { cursor: copy; }
-.c-context-menu { cursor: context-menu; }
-.c-crosshair { cursor: crosshair; }
-.c-default { cursor: default; }
-.c-e-resize { cursor: e-resize; }
-.c-ew-resize { cursor: ew-resize; }
-.c-grab { cursor: -webkit-grab; cursor: grab; }
-.c-grabbing { cursor: -webkit-grabbing; cursor: grabbing; }
-.c-help { cursor: help; }
-.c-move { cursor: move; }
-.c-n-resize { cursor: n-resize; }
-.c-ne-resize { cursor: ne-resize; }
-.c-nesw-resize { cursor: nesw-resize; }
-.c-none { cursor: none; }
-.c-not-allowed { cursor: not-allowed; }
-.c-ns-resize { cursor: ns-resize; }
-.c-nw-resize { cursor: nw-resize; }
-.c-nwse-resize { cursor: nwse-resize; }
-.c-pointer { cursor: pointer; }
-.c-progress { cursor: progress; }
-.c-row-resize { cursor: row-resize; }
-.c-s-resize { cursor: s-resize; }
-.c-se-resize { cursor: se-resize; }
-.c-sw-resize { cursor: sw-resize; }
-.c-text { cursor: text; }
-.c-vertical-text { cursor: vertical-text; }
-.c-w-resize { cursor: w-resize; }
-.c-wait { cursor: wait; }
-.c-zoom-in { cursor: zoom-in; }
-.c-zoom-out { cursor: zoom-out; }
-
 /* iFrame */
 iframe { height: 100%; width: 100%; }
 
 /* Links */
 .text-link:before {
-  background-color: #fff44e;
   bottom: 0;
   content: "";
   height: 2px;
@@ -65,7 +20,6 @@ iframe { height: 100%; width: 100%; }
 }
 
 .text-link {
-  color: #fff44e;
   position: relative;
   text-decoration: none;
 }
@@ -84,3 +38,6 @@ iframe { height: 100%; width: 100%; }
   -ms-overflow-scrolling: touch;
   -webkit-overflow-scrolling: touch;
 }
+
+/* SVG */
+/*svg { vertical-align: middle; }*/
