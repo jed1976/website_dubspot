@@ -1,5 +1,31 @@
+/* Animations */
+@keyframes fast-cut {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* bLazy.js */
+/*.b-lazy {
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+}
+
+.b-lazy.b-loaded {
+  opacity: 1;
+}*/
+
+/* Coordinates */
+.bottom-3 { bottom: 4rem; }
+
 /* iFrame */
 iframe { height: 100%; width: 100%; }
+
+/* Inputs */
+input { outline: none; }
 
 /* Links */
 .text-link:before {
@@ -31,6 +57,15 @@ iframe { height: 100%; width: 100%; }
 /* Pointer Events */
 .pointer-events-none { pointer-events: none; }
 
+/* Program Title */
+.program-title {
+  animation-delay: 500ms;
+  animation-duration: 350ms;
+  animation-fill-mode: forwards;
+  animation-name: fast-cut;
+  transform: translateX(-100%);
+}
+
 /* Scroll */
 .overflow-scrolling-touch
 {
@@ -38,6 +73,3 @@ iframe { height: 100%; width: 100%; }
   -ms-overflow-scrolling: touch;
   -webkit-overflow-scrolling: touch;
 }
-
-/* SVG */
-/*svg { vertical-align: middle; }*/

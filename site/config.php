@@ -89,7 +89,7 @@ $config->installed = 1487012232;
  * Installer: HTTP Hosts Whitelist
  *
  */
-$config->httpHosts = array('dubspot.dev');
+$config->httpHosts = ['dubspot.dev'];
 
 
 /**
@@ -98,3 +98,8 @@ $config->httpHosts = array('dubspot.dev');
 $config->prependTemplateFile  = '_init.php';
 $config->appendTemplateFile   = '_main.php';
 $config->useMarkupRegions     = true;
+
+/**
+ * CSRF
+ */
+$config->protectCSRF = true;

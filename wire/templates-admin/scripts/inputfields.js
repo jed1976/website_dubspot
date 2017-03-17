@@ -659,9 +659,14 @@ function InputfieldColumnWidths($target) {
 	 */
 	function getWidth($item) {
 		if($item.is(".InputfieldStateHidden")) return 0;
-		var style = $item.attr('style');
-		if(typeof style == "undefined" || !style) return $item.width();
-		var pct = parseInt(style.match(/width:\s*(\d+)/i)[1]);
+		var pct = $item.attr('data-colwidth'); // colwidth tracked when NoWidths mode enabled
+		if(typeof pct ==  "undefined" || !pct.length) {
+			var style = $item.attr('style');
+			if(typeof style == "undefined" || !style) return $item.width();
+			var pct = parseInt(style.match(/width:\s*(\d+)/i)[1]);
+		} else {
+			pct = parseInt(pct);
+		}
 		// store the original width in another attribute, for later retrieval
 		if(!$item.attr('data-original-width')) $item.attr('data-original-width', pct);
 		// consoleLog('getWidth(' + $item.attr('id') + '): ' + pct + '%'); 
@@ -828,6 +833,7 @@ function InputfieldColumnWidths($target) {
 
 	} // updateInputfield
 
+	var numForms = 0;
 	$target.each(function() {
 		
 		var $form = $(this);
@@ -853,9 +859,14 @@ function InputfieldColumnWidths($target) {
 		$(".InputfieldColumnWidthFirst.InputfieldColumnWidth:visible", $form).each(function() {
 			updateInputfieldRow($(this));
 		});
+		
+		numForms++;
 	});
 	
-	if(!$('body').hasClass('InputfieldColumnWidthsInit')) {
+	if(!numForms) {
+		// no need to do anything further
+
+	} else if(!$('body').hasClass('InputfieldColumnWidthsInit')) {
 		// initialize monitoring events on first run
 		$('body').addClass('InputfieldColumnWidthsInit');
 		
@@ -928,13 +939,16 @@ function InputfieldStates($target) {
 			var interval;
 			var maxRuns = 10;
 			var runs = 0;
+			var hAdjust = 0.8;
 			
 			$("body").append($spinner.hide());
+			
+			if($header.is('a') && $header.closest('ul').hasClass('uk-tab')) hAdjust = 0.1;
 			
 			$spinner.css({
 				position: 'absolute',	
 				top: offset.top - ($spinner.height() + 5),
-				left: offset.left + ($header.width() / 2) + ($spinner.width() * 0.8)
+				left: offset.left + ($header.width() / 2) + ($spinner.width() * hAdjust) 
 			}).fadeIn();
 			
 			interval = setInterval(function() {
@@ -1202,7 +1216,21 @@ function InputfieldIntentions() {
 			// allow submissions again once they are out of the field
 			$form.removeClass('nosubmit');
 		}); 
-	}); 
+	});
+
+	// prevent dragged in files from loading in the browser (does not interfere with other drag/drop handlers)
+	if($("input[type=file]").length) {
+		$(document).on({
+			dragover: function() {
+				if($(this).is("input[type=file]")) return;
+				return false;
+			},
+			drop: function() {
+				if($(this).is("input[type=file]")) return;
+				return false;
+			}
+		});
+	}
 }
 
 /***********************************************************************************/

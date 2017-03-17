@@ -872,7 +872,7 @@ function thead($attributes = [], $content = '')
  * @param array   $attributes   HTML attributes.
  * @param string  $content      HTML or Text content.
  */
-function time($attributes = [], $content = '')
+function h_time($attributes = [], $content = '')
 {
   return element('time', $attributes, $content);
 }
@@ -913,6 +913,37 @@ function video($attributes = [], $content = '')
 // Utilities
 
 /**
+ * Returns a ProcessWire User object if found.
+ *
+ * @param  $email string  User email address.
+ * @return array          \ProcessWire\User and token.
+ */
+function fetch_or_create_user($email = '')
+{
+  $u = \ProcessWire\wire('users')->get("email=$email");
+
+  // Create User
+  if ($u instanceof \ProcessWire\NullPage) {
+    $u = \ProcessWire\wire('users')->add($email);
+    $u->email = $email;
+    $u->addRole('pending');
+  }
+
+  // Create tokens
+  $string = $email.\ProcessWire\wire('config')->userAuthSalt.time();
+  $token = sha1(str_shuffle($string));
+  $u->setOutputFormatting(false); // Needed in order to make change to properties
+  $u->pass = $token;
+  $u->user_ip = $_SERVER['REMOTE_ADDR'];
+  $u->user_token = sha1(str_shuffle($string));
+  $u->user_token_timestamp = time();
+  $u->save();
+  $u->setOutputFormatting(true);
+
+  return ['user' => $u, 'token' => $token];
+}
+
+/**
  * Returns an image path from a selector.
  *
  * @param $selector string
@@ -937,12 +968,44 @@ function product_color(\ProcessWire\Page $product)
 }
 
 /**
+ * Sends an email using WireMail.
+ *
+ * @param   $to_address     string
+ * @param   $from_address   string
+ * @param   $from_title     string
+ * @param   $subject        string
+ * @param   $body           string
+ * @return  mixed
+ */
+function send_email($to_address = '', $from_address = '', $from_title = '', $subject = '', $body = '')
+{
+  $mail = \ProcessWire\wire('mail')->new();
+  $mail->to($to)
+    ->from($from_address, $from_title)
+    ->subject($subject)
+    ->body($sanitizer->markupToText($body))
+    ->bodyHTML($body)
+    ->send();
+}
+
+/**
+ * Returns inline SVG content from a file path.
+ *
+ * @param $path string
+ * @return mixed
+ */
+function svg_image($path = '')
+{
+    return file_get_contents(\ProcessWire\wire('config')->paths->templates.$path);
+}
+
+/**
  * Returns inline SVG content from a selector.
  *
  * @param $selector string
  * @return mixed
  */
-function svg_image($selector = '')
+function svg_image_selector($selector = '')
 {
     return file_get_contents(
       \ProcessWire\wire('config')->paths->root.

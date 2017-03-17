@@ -116,24 +116,16 @@ abstract class AdminTheme extends WireData implements Module {
 		// if admin theme has already been set, then no need to continue
 		if($this->wire('adminTheme')) return; 
 
-		$isCurrent = false;
 		$adminTheme = $this->wire('user')->admin_theme; 
 
 		if($adminTheme) {
 			// there is user specified admin theme
 			// check if this is the one that should be used
-			if($adminTheme == $this->className()) $isCurrent = true; 
+			if($adminTheme == $this->className()) $this->setCurrent();
 			
 		} else if($this->wire('config')->defaultAdminTheme == $this->className()) {
 			// there is no user specified admin theme, so use this one
-			$isCurrent = true; 
-		}
-
-		// set as an API variable and populate configuration variables
-		if($isCurrent) {
-			$this->wire('adminTheme', $this); 
-			$this->config->paths->set('adminTemplates', $this->config->paths->get($this->className())); 
-			$this->config->urls->set('adminTemplates', $this->config->urls->get($this->className())); 
+			$this->setCurrent();
 		}
 
 		// adjust $config adminThumbOptions[scale] for auto detect when requested
@@ -164,6 +156,19 @@ abstract class AdminTheme extends WireData implements Module {
 	}
 
 	/**
+	 * Set this admin theme as the current one
+	 * 
+	 */
+	protected function setCurrent() {
+		$config = $this->wire('config');
+		$name = $this->className();
+		$config->paths->set('adminTemplates', $config->paths->get($name));
+		$config->urls->set('adminTemplates', $config->urls->get($name)); 
+		$config->set('defaultAdminTheme', $name);
+		$this->wire('adminTheme', $this);
+	}
+
+	/**
 	 * Enables hooks to append extra markup to various sections of the admin page
 	 * 
 	 * @return array Associative array containing the following properties, any of 
@@ -186,9 +191,11 @@ abstract class AdminTheme extends WireData implements Module {
 				"window.CKEDITOR_BASEPATH='" . $this->wire('config')->urls->InputfieldCKEditor . 
 				'ckeditor-' . InputfieldCKEditor::CKEDITOR_VERSION . "/';</script>";
 		}
+		/*
 		if($isLoggedin && $this->wire('config')->advanced) {
 			$parts['footer'] = "<p class='AdvancedMode'><i class='fa fa-flask'></i> " . $this->_('Advanced Mode') . "</p>";
 		}
+		*/
 		foreach($this->preRenderURLs as $url) {
 			$parts['head'] .= "<link rel='prerender' href='$url'>";
 		}
@@ -249,31 +256,37 @@ abstract class AdminTheme extends WireData implements Module {
 		// we already have this field installed, no need to continue
 		if($field) {
 			$this->message($toUseNote); 
-			return;
+		} else {
+			// this will be the 2nd admin theme installed, so add a field that lets them select admin theme
+			$field = $this->wire(new Field());
+			$field->name = 'admin_theme';
+			$field->type = $this->wire('modules')->get('FieldtypeModule');
+			$field->set('moduleTypes', array('AdminTheme'));
+			$field->set('labelField', 'title');
+			$field->set('inputfieldClass', 'InputfieldRadios');
+			$field->label = 'Admin Theme';
+			$field->flags = Field::flagSystem;
+			try {
+				$field->save();
+			} catch(\Exception $e) {
+				$this->error("Error creating 'admin_theme' field: " . $e->getMessage());
+			}
 		}
 
-		// this will be the 2nd admin theme installed, so add a field that lets them select admin theme
-		$field = $this->wire(new Field());
-		$field->name = 'admin_theme';
-		$field->type = $this->wire('modules')->get('FieldtypeModule'); 
-		$field->set('moduleTypes', array('AdminTheme')); 
-		$field->set('labelField', 'title'); 
-		$field->set('inputfieldClass', 'InputfieldRadios'); 
-		$field->label = 'Admin Theme';
-		$field->flags = Field::flagSystem; 
-		$field->save();	
-
-		$fieldgroup = $this->wire('fieldgroups')->get('user'); 
-		$fieldgroup->add($field); 
-		$fieldgroup->save();
-
-		// make this field one that the user is allowed to configure in their profile
-		$data = $this->wire('modules')->getModuleConfigData('ProcessProfile'); 
-		$data['profileFields'][] = 'admin_theme';
-		$this->wire('modules')->saveModuleConfigData('ProcessProfile', $data); 
-
-		$this->message($this->_('Installed field "admin_theme" and added to user profile settings.')); 
-		$this->message($toUseNote); 
+		if($field && $field->id) {
+			/** @var Fieldgroup $fieldgroup */
+			$fieldgroup = $this->wire('fieldgroups')->get('user');
+			if(!$fieldgroup->hasField($field)) {
+				$fieldgroup->add($field);
+				$fieldgroup->save();
+				$this->message($this->_('Installed field "admin_theme" and added to user profile settings.'));
+				$this->message($toUseNote);
+			}
+			// make this field one that the user is allowed to configure in their profile
+			$data = $this->wire('modules')->getModuleConfigData('ProcessProfile');
+			$data['profileFields'][] = 'admin_theme';
+			$this->wire('modules')->saveModuleConfigData('ProcessProfile', $data); 
+		}
 	}
 
 	/**

@@ -13,8 +13,8 @@ function promotion()
 
   return
     ($promotion->id == false ? '' :
-      \DS\header(['class'=>'bb bt bw1 mb4 mh3 mh4-l', 'style'=>"background: url({$promotion->image->url}) center right no-repeat; border-color:{$promotion->color}; color:{$promotion->color};"],
-        \DS\div(['class'=>'bg-near-black pr3 pr4-l pt3 pb3 w-75 w-80-m'],
+      \DS\header(['class'=>'bb bt bw1 mb4 mb5-ns mh3 mh4-l', 'style'=>"background: url({$promotion->image->url}) center right no-repeat; border-color:{$promotion->color}; color:{$promotion->color};"],
+        \DS\div(['class'=>'bg-black pr3 pr4-l pt3 pb3 w-75 w-80-m'],
           \DS\dl(['class'=>'dt-ns ma0 mb1 w-100'],
             \DS\dt(['class'=>'dtc-ns f3-ns f4 fw5 ma0 w-50-m w-60-l'], $promotion->title).
             \DS\dd(['class'=>'dn dtc-ns f7 ma0 pa0 tr-ns v-mid w-40-l w-50-m'], "Sale ends {$promotion->end_date} EST")

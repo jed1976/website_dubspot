@@ -900,7 +900,8 @@ class Page extends WireData implements \Countable, WireMatchable {
 		if(!$this->isLoaded) {
 
 			// send the value to the Fieldtype to be woken up for storage in the page
-			$value = $field->type->wakeupValue($this, $field, $value); 
+			// $value = $field->type->wakeupValue($this, $field, $value); 
+			$value = $field->type->_callHookMethod('wakeupValue', array($this, $field, $value));
 
 			// page is currently loading, so we don't need to continue any further
 			return parent::set($key, $value); 
@@ -917,8 +918,9 @@ class Page extends WireData implements \Countable, WireMatchable {
 			$isCorrupted = false;
 			if(is_object($value) && $value instanceof PageFieldValueInterface) {
 				if($value->formatted()) $isCorrupted = true;
-			} else if($this->outputFormatting && $field->type->formatValue($this, $field, $value) != $value) {
-				$isCorrupted = true;
+			} else if($this->outputFormatting) {
+				$result = $field->type->_callHookMethod('formatValue', array($this, $field, $value));
+				if($result != $value) $isCorrupted = true; 
 			}
 			if($isCorrupted) {
 				// The field has been loaded or dereferenced from the API, and this field changes when formatters are applied to it. 
@@ -1102,7 +1104,7 @@ class Page extends WireData implements \Countable, WireMatchable {
 	 */
 	public function getField($field) {
 		$template = $this->template;
-		$fieldgroup = $template ? $this->template->fieldgroup : null;
+		$fieldgroup = $template ? $template->fieldgroup : null;
 		if(!$fieldgroup) return null;
 		if($this->outputFormatting && $fieldgroup->hasFieldContext($field)) {
 			$value = $fieldgroup->getFieldContext($field);
@@ -1321,13 +1323,15 @@ class Page extends WireData implements \Countable, WireMatchable {
 		if($selector) {
 			$value = $field->type->loadPageFieldFilter($this, $field, $selector);	
 		} else {
-			$value = $field->type->loadPageField($this, $field);
+			// $value = $field->type->loadPageField($this, $field);
+			$value = $field->type->_callHookMethod('loadPageField', array($this, $field));
 		}
 		
 		if(is_null($value)) {
 			$value = $field->type->getDefaultValue($this, $field);
 		} else {
-			$value = $field->type->wakeupValue($this, $field, $value);
+			$value = $field->type->_callHookMethod('wakeupValue', array($this, $field, $value)); 
+			//$value = $field->type->wakeupValue($this, $field, $value);
 		}
 
 		// turn off output formatting and set the field value, which may apply additional changes
@@ -1373,7 +1377,8 @@ class Page extends WireData implements \Countable, WireMatchable {
 
 		if($this->outputFormatting) {
 			// output formatting is enabled so return a formatted value
-			$value = $field->type->formatValue($this, $field, $value);
+			//$value = $field->type->formatValue($this, $field, $value);
+			$value = $field->type->_callHookMethod('formatValue', array($this, $field, $value));
 			// check again for interface since value may now be different
 			if($hasInterface) $hasInterface = is_object($value) && $value instanceof PageFieldValueInterface;
 			if($hasInterface) $value->formatted(true);
@@ -2489,7 +2494,7 @@ class Page extends WireData implements \Countable, WireMatchable {
 	 *   making the return value the same as the `Page::hasChildren()` method. 
 	 * 
 	 * - When output formatting is off, returns number of all children without exclusion,
-	 *   making the return value teh same as the `Page::numChildren()` method. 
+	 *   making the return value the same as the `Page::numChildren()` method. 
 	 * 
 	 * ~~~~~
 	 * // Get number of visible children, like $page->hasChildren()
@@ -3355,7 +3360,10 @@ class Page extends WireData implements \Countable, WireMatchable {
 			unset(Page::$loadingStack[$this->settings['id']]); 
 		}
 		$this->isLoaded = $isLoaded ? true : false; 
-		if($isLoaded) $this->loaded();
+		if($isLoaded) {
+			//$this->loaded();
+			$this->_callHookMethod('loaded');
+		}
 		return $this; 
 	}
 
@@ -3818,5 +3826,23 @@ class Page extends WireData implements \Countable, WireMatchable {
 		$result = $this->wire('pages')->$method($selector, $options);
 		return $result;
 	}
+
+	/*
+	public function remove($key) {
+		parent::remove($key);
+		if(isset($this->data[$key])) {
+			$a = parent::get('_statusCorruptedFields');
+			if(!is_array($a)) $a = array();
+			$k = array_search($key, $a);
+			if($k !== false) {
+				unset($a[$k]); 
+				if(empty($a)) $this->removeStatus(self::statusCorrupted);
+				parent::set('_statusCorruptedFields', $a);
+			}
+		}
+		return $this;
+	}
+	*/
+	
 }
 

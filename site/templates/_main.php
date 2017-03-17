@@ -8,7 +8,7 @@ $open_graph_title       = $page->open_graph_title && !$page->open_graph_title_sa
 $open_graph_description = $page->open_graph_description && !$page->open_graph_description_same ? $page->open_graph_description : $seo_meta_description;
 
 $locations    = $pages->find('template=location, street_address!=""');
-$admissions   = $pages->get('template=email, title=Admissions');
+$admissions   = $pages->get('template=email_address, title=Admissions');
 $copyright    = '&copy; '.date('Y').' '.$locations[0]->title;
 $social_links = $pages->find('template=social-link, sort=sort');
 
@@ -64,6 +64,7 @@ print(
             .b--{$color_name} { border-color: {$color_value}; }
             .bg-{$color_name} { background-color: {$color_value}; }
             .{$color_name} { color: {$color_value}; }
+            input.focus-{$color_name}:focus { border-color: {$color_value}; }
           ";
         }).
           ".text-link:before { background-color: ".DS_YELLOW."; }
@@ -79,10 +80,10 @@ print(
         // Links
         link(['rel'=>'canonical', 'href'=>$page->httpUrl])
       ).
-      body(['class'=>'bg-near-black helvetica white', 'data-pw-id'=>'html-body'],
+      body(['class'=>'bg-black helvetica white', 'data-pw-id'=>'html-body'],
         nav(
           a(['class'=>'dib fixed link right-1 right-2-ns top-1 w3 white z-999', 'href'=>'/'],
-            svg_image('title=Dubspot Circle')
+            svg_image_selector('title=Dubspot Circle')
           )
         ).
 
@@ -90,7 +91,7 @@ print(
         main(['data-pw-id'=>'content', 'role'=>'main']).
 
         // Footer
-        footer(['class'=>'b--ds-yellow bt bw3 cover pa3 pa4-l'],
+        footer(['class'=>'b--ds-yellow bt bw4 cover pa3 pa4-l'],
           div(['class'=>'cf mb4-l'],
             h6(['class'=>'f6 fw4 fl ds-gray pv0 mb4 tracked ttu w-100'], 'Locations').
             $locations->each(function($location) {
@@ -109,8 +110,8 @@ print(
             ).
             div(['class'=>'fl mb0-ns mb4 w-50-l w-100'],
               p(['class'=>'f6 fw7 lh-copy mb2 measure mt0'], 'Sign up for our newsletter.').
-              input(['class'=>'b--ds-yellow ba bg-transparent border-box br0 f5 input-reset mw-100 pa3 w-100 w5-ns white', 'placeholder'=>'Email Address']).
-              input(['class'=>'b--ds-yellow ba bg-ds-yellow black br0 f5 fw7 input-reset ph4 pointer pv2 pv3 ttu w-100 w-auto-ns', 'type'=>'submit', 'value'=>'Sign Up'])
+              input(['class'=>'b--ds-yellow ba bg-black border-box br0 f5 mw-100 pa3 w-100 w5-ns white', 'placeholder'=>'Email Address']).
+              input(['class'=>'b--ds-yellow ba bg-ds-yellow black br0 dim f5 fw7 button-reset ph4 pointer pv2 pv3 ttu w-100 w-auto-ns', 'type'=>'submit', 'value'=>'Sign Up'])
             )
           ).
           div(['class'=>'cf'],
@@ -118,7 +119,7 @@ print(
               $social_links->each(function($social_link) {
                 return
                   a(['class'=>'dib dim ds-gray h2 link mh2 pointer v-mid w2', 'href'=>$social_link->url_address, 'title'=>"Visit our {$social_link->title} page."],
-                    span(['class'=>'di v-btm lh-copy'], svg_image("title={$social_link->title}"))
+                    span(['class'=>'di v-btm lh-copy'], svg_image_selector("title={$social_link->title}"))
                   );
               })
             ).
