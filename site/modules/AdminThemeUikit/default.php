@@ -28,7 +28,7 @@ if($adminTheme->isModal) {
 	$layout = '';
 }
 
-if($layout === 'sidenav-init') {
+if($layout === 'sidenav-init' || $layout === 'sidenav-tree-init') {
 	// sidenav main loader
 	include($config->paths->adminTemplates . "_sidenav-init.php");
 	
@@ -47,6 +47,8 @@ if($layout === 'sidenav-init') {
 	if($user->isLoggedin() && $adminTheme->layout && !$adminTheme->isModal) {
 		$layout = $adminTheme->layout;
 		$adminTheme->addBodyClass("pw-layout-$layout");
+	} else if($layout != 'modal') {
+		$layout = '';
 	}
 	include($config->paths->adminTemplates . "_main.php");
 }

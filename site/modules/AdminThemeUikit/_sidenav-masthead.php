@@ -34,7 +34,7 @@ $breadcrumbs = $adminTheme->renderBreadcrumbs();
 	<div class='pw-container uk-container uk-container-expand'>
 		<nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
 			<div class="uk-navbar-left">
-				<a onclick='return toggleSidebar();' href="<?php echo $urls->admin; ?>">
+				<a onclick='return toggleSidebar()' class='pw-logo-link' href="<?php echo $urls->admin; ?>">
 					<img class='pw-logo' src='<?php echo $adminTheme->getLogoURL(); ?>' alt='ProcessWire'>
 				</a>
 				<?php echo str_replace("uk-breadcrumb", "uk-breadcrumb uk-visible@m", $breadcrumbs); ?>	
@@ -47,21 +47,6 @@ $breadcrumbs = $adminTheme->renderBreadcrumbs();
 							<?php echo $adminTheme->renderNavIcon('user') . $user->name; ?>
 						</a>
 						<ul class="pw-dropdown-menu" data-my="left top" data-at="left bottom" style="display: none;">
-							<li>	
-								<a href='#' onclick="return toggleSidebar();">
-									<?php echo $adminTheme->renderNavIcon('bars') . __('Nav toggle'); ?>
-								</a>
-							</li>
-							<li>	
-								<a href='#' onclick="return toggleTree();">
-									<?php echo $adminTheme->renderNavIcon('sitemap') . __('Tree toggle'); ?>
-								</a>
-							</li>
-							<li>	
-								<a target='_top' href='<?php echo $urls->admin; ?>?admin_layout=default'>
-									<?php echo $adminTheme->renderNavIcon('outdent') . __('Disable sidebars'); ?>
-								</a>
-							</li>
 							<?php if($config->debug) { ?>
 							<li>	
 								<a href='#' onclick="$('#debug_toggle').click(); return false;">
@@ -70,6 +55,16 @@ $breadcrumbs = $adminTheme->renderBreadcrumbs();
 							</li>
 							<?php } ?>
 							<?php echo $adminTheme->renderUserNavItems(); ?>
+							<li>	
+								<a href='#' onclick="return toggleSidebar();">
+									<?php echo $adminTheme->renderNavIcon('bars') . __('Navigation sidebar'); ?>
+								</a>
+							</li>
+							<li>	
+								<a href='#' onclick="return toggleTree();">
+									<?php echo $adminTheme->renderNavIcon('sitemap') . __('Page tree sidebar'); ?>
+								</a>
+							</li>
 						</ul>
 					</li>
 				</ul>

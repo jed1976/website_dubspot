@@ -1,7 +1,7 @@
 /**
  * ProcessWire Admin Theme jQuery/Javascript
  *
- * Copyright 2016 by Ryan Cramer
+ * Copyright 2017 by Ryan Cramer
  *
  */
 
@@ -14,6 +14,7 @@ var ProcessWireAdminTheme = {
 	init: function() {
 		this.setupInputfields();
 		this.setupTooltips();
+		this.checkLayout();
 	}, 
 
 	/**
@@ -35,18 +36,32 @@ var ProcessWireAdminTheme = {
 		});
 		
 		$('a.notice-remove', '#notices').click(function() {
-			$('#notices').slideUp('fast', function() {
-				$(this).remove();
-			});
+			$('#notices').slideUp('fast', function() { $(this).remove(); });
 			return false;
 		});
+		
+		$('a.pw-logo-link').click(this.logoClickEvent);
 		
 		$('#_ProcessPageEditView').click(function(e) {
 			// Uikit tab blocks this link, so this allows it through
 			e.stopPropagation();
 		});
+	
 	},
 
+	/**
+	 * If layout is one that requires a frame, double check that there is a frame and correct it if not
+	 * 
+	 */
+	checkLayout: function() {
+		if($('body').attr('class').indexOf('pw-layout-sidenav') > -1) {
+			if(typeof parent == "undefined" || typeof parent.isPresent == "undefined") {
+				var href = window.location.href;
+				href += (href.indexOf('?') > -1 ? '&' : '?') + 'layout=sidenav-init';
+				window.location.href = href;
+			}
+		}
+	}, 
 
 	/**
 	 * Clone a button at the bottom to the top
@@ -113,7 +128,6 @@ var ProcessWireAdminTheme = {
 			console.log(id);
 			var $toggle = toggles[id];
 			var $button = $('#' + id);
-			console.log($button);
 			$button.after($toggle);
 		}
 	},
@@ -203,8 +217,14 @@ var ProcessWireAdminTheme = {
 				},
 				select: function(event, ui) {
 					// follow the link if the Enter/Return key is tapped
+					
+					$(this).val('');
 					event.preventDefault();
-					window.location = ui.item.edit_url;
+					if(typeof parent.isPresent == "undefined") {
+						window.location = ui.item.edit_url;
+					} else {
+						parent.jQuery('#pw-admin-main')[0].contentWindow.document.location.href = ui.item.edit_url;
+					}
 				}
 			}).focus(function() {
 				// $(this).siblings('label').find('i').hide(); // hide icon
@@ -464,6 +484,54 @@ var ProcessWireAdminTheme = {
 			$(this).removeClass('tooltip pw-tooltip');
 			UIkit.tooltip($(this));
 		});
+	},
+
+	/**
+	 * Mouseover event used by _sidenav-side.php and _sidenav-tree.php
+	 * 
+	 */
+	linkTargetMainMouseoverEvent: function() {
+		
+		var $a = $(this);
+		var href = $a.attr('href');
+		
+		if(href.length < 2) return; // skip '#'
+		if($a.attr('target')) return; // already set
+		
+		/*
+		 if(href.indexOf(ProcessWire.config.urls.admin) > -1) {
+		 href += (href.indexOf('?') > -1 ? '&' : '?') + 'layout=sidenav-main';
+		 $a.attr('href', href);
+		 }
+		 */
+		
+		if($a.parent('li').hasClass('PageListActionView')) {
+			$a.attr('target', '_top');
+		} else {
+			$a.attr('target', 'main');
+		}
+		
+	},
+
+	/**
+	 * Click event for ProcessWire logo
+	 * 
+	 */
+	logoClickEvent: function() {
+		if($('body').hasClass('pw-layout-sidenav-init')) {
+			if($('#pw-admin-side').length) {
+				// sidebar layout navigation present
+				toggleSidebarPane();
+			} else {
+				// show offcanvas nav
+				// $('#pw-admin-main')[0].contentWindow.jQuery('#offcanvas-toggle').click();
+				$('#offcanvas-toggle').click();
+			}
+		} else {
+			// show offcanvas nav
+			$('#offcanvas-toggle').click();
+		}
+		return false;
 	}
 };
 

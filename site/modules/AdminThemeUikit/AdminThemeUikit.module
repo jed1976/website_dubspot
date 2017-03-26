@@ -12,7 +12,7 @@
  * @property array $offsetTypes Inputfield class names that should always use the offset option.
  * @property string $logoURL URL to custom logo, relative to PW installation root. 
  * @property string $cssURL URL to custom CSS file, relative to PW installation root. 
- * @property string $layout Layout type (blank=default, sidenav=multi-pane)
+ * @property string $layout Layout type (blank=default, sidenav=multi-pane, sidenav-tree=left-tree, sidenav-tree-alt=right-tree)
  * 
  */
 class AdminThemeUikit extends AdminThemeFramework implements Module, ConfigurableModule {
@@ -20,10 +20,10 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Uikit',
-			'version' => 4,
+			'version' => 5,
 			'summary' => 'Base Uikit v3 admin theme',
-			'autoload' => 'template=admin',
-			'requires' => 'ProcessWire>=3.0.54'
+			'autoload' => true, 
+			'requires' => 'ProcessWire>=3.0.57'
 		); 
 	}
 
@@ -40,11 +40,24 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	const logo = 'uikit/custom/images/pw-mark.png';
 
 	/**
+	 * sidenavType: primary navigation on left sidebar
+	 * 
+	 */
+	const sidenavTypePrimary = 0;
+
+	/**
+	 * sidenavType: tree navigation on left sidebar
+	 * 
+	 */
+	const sidenavTypeTree = 1;
+
+	/**
 	 * Construct and establish default module config settings
 	 * 
 	 */
 	public function __construct() {
-		$this->wire('config')->defaultAdminTheme = $this->className();
+		$config = $this->wire('config');
+		$config->defaultAdminTheme = $this->className();
 		parent::__construct();
 		$this->set('useOffset', false);
 		$this->set('cardTypes', array());
@@ -56,32 +69,49 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 			'InputfieldCKEditor', 
 		));
 	}
+	
+	public function init() {
+		// intentionally blank
+	}
 
 	/**
 	 * Initialize and attach hooks
 	 * 
 	 */
-	public function init() {
+	public function ready() {
+	
+		$page = $this->wire('page');
 		
+		if($page->template != 'admin') {
+			// front-end
+			if(strpos($this->layout, 'sidenav') === 0) { 
+				// ensure that page edit links on front-end load the sidenav-init 
+				$this->wire('session')->setFor('Page', 'appendEditUrl', "&layout=sidenav-init");
+			}
+			return;
+		} 
+		
+		$this->wire('session')->removeFor('Page', 'appendEditUrl');
 		parent::init(); 
 		
 		// if this is not the current admin theme, exit now so no hooks are attached
 		if(!$this->isCurrent()) return;
 
-		// override admin theme setting if layout specified in session
-		$layout = $this->wire('input')->get->alpha('admin_layout');
-		if($layout && ($layout === 'default' || $layout === 'sidenav')) {
-			$this->wire('session')->setFor($this, 'layout', $layout); 
-		} else {
-			$layout = $this->wire('session')->getFor($this, 'layout');
-		}
-		if($layout) $this->layout = $layout;
-	
+		$this->wire('modules')->get('JqueryUI')->use('panel');
+
 		// add rendering hooks
 		$this->addHookBefore('Inputfield::render', $this, 'hookBeforeRenderInputfield');
 		$this->addHookAfter('Inputfield::getConfigInputfields', $this, 'hookAfterInputfieldGetConfigInputfields');
 		$this->addHookAfter('MarkupAdminDataTable::render', $this, 'hookAfterTableRender');
-		if($this->layout == 'sidenav') $this->addHookAfter('ProcessLogin::afterLoginURL', $this, 'hookAfterLoginURL');
+	
+		// hooks and settings specific to sidebar layouts
+		if(strpos($this->layout, 'sidenav') === 0) { 
+			$this->addHookAfter('ProcessLogin::afterLoginURL', $this, 'hookAfterLoginURL');
+			if(strpos($this->layout, 'sidenav-tree') === 0) {
+				// page-edit breadcrumbs go to page editor when page tree is always in sidebar
+				$this->wire('config')->pageEdit('editCrumbs', true);
+			}
+		}
 		
 		// add cache clearing hooks
 		$this->wire('pages')->addHookAfter('saved', $this, 'hookClearCaches');
@@ -345,7 +375,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		// don't show breadcrumbs if only one of them (subjective)
 		if(count($breadcrumbs) < 2 && $process != 'ProcessPageEdit') return '';
 
-		if($this->layout != 'sidenav') {
+		if(strpos($this->layout, 'sidenav') === false) {
 			$out = "<li>" . $this->renderQuickTreeLink() . "</li>";
 		}
 
@@ -700,131 +730,9 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	 * 
 	 */
 	public function getModuleConfigInputfields(InputfieldWrapper $inputfields) {
-		
 		parent::getModuleConfigInputfields($inputfields);
-	
-		$defaultNote = $this->_('When blank, the default file used.') . ' ';
-		$defaultDesc = $this->_('Enter path relative to homepage URL.');
-		
-		/** @var InputfieldFieldset $fieldset */
-		$fieldset = $this->modules->get('InputfieldFieldset');
-		$fieldset->label = $this->_('Layout');
-		$fieldset->collapsed = Inputfield::collapsedBlank;
-		$fieldset->icon = '';
-		$inputfields->add($fieldset);
-	
-		/** @var InputfieldRadios $f */
-		$f = $this->modules->get('InputfieldRadios');
-		$f->attr('name', 'layout');
-		$f->label = $this->_('Layout type');
-		$f->addOption('', $this->_('Default (top navigation)'));
-		$f->addOption('sidenav', $this->_('Sidebars (side navigation panels)'));
-		$f->attr('value', $this->layout);
-		$fieldset->add($f);
-
-		/** @var InputfieldFieldset $fieldset */
-		$fieldset = $this->modules->get('InputfieldFieldset');
-		$fieldset->label = $this->_('Custom files');
-		$fieldset->collapsed = Inputfield::collapsedBlank;
-		$fieldset->icon = 'files-o';
-		$inputfields->add($fieldset);
-	
-		/** @var InputfieldText $f */
-		$f = $this->modules->get('InputfieldText'); 
-		$f->attr('name', 'cssURL'); 
-		$f->attr('value', $this->get('cssURL'));
-		$f->label = $this->_('Primary CSS file'); 
-		$f->description = $defaultDesc;
-		$f->notes = $defaultNote . "\nsite/modules/AdminThemeUikit/uikit/dist/css/uikit.pw.css";
-		$f->collapsed = Inputfield::collapsedBlank;
-		$f->icon = 'file-code-o';
-		$fieldset->add($f);
-
-		/** @var InputfieldText $f */
-		$f = $this->modules->get('InputfieldText');
-		$f->attr('name', 'logoURL');
-		$f->attr('value', $this->get('logoURL'));
-		$f->label = $this->_('Logo image file');
-		$f->description = $defaultDesc;
-		$f->notes = $defaultNote . $this->_('File should be PNG, GIF or JPG and at least 100px in both dimensions.');
-		$f->collapsed = Inputfield::collapsedBlank;
-		$f->icon = 'file-image-o';
-		$fieldset->add($f);
-	
-		/** @var InputfieldFieldset $fieldset */
-		$fieldset = $this->modules->get('InputfieldFieldset');
-		$fieldset->label = $this->_('Form field visibility settings');
-		$fieldset->description =
-			$this->_('These settings affect all form fields in the admin.') . ' ' . 
-			$this->_('Any of these settings (and others) may also be specified individually for a given field.') . ' ' .
-			$this->_('If you specify a setting here, it will override individual field settings.') . ' ' .
-			$this->_('See: Setup > Fields > [any field] > Visibility > Theme settings.');
-		$fieldset->icon = 'flask';
-		$fieldset->collapsed = Inputfield::collapsedBlank;
-		$inputfields->add($fieldset);
-	
-		$types = $this->modules->findByPrefix('Inputfield');
-		ksort($types);
-		$skipTypes = array('Button', 'Submit', 'Form', 'Hidden');
-		foreach($types as $key => $name) {
-			$name = str_replace('Inputfield', '', $name);
-			if(in_array($name, $skipTypes)) continue;
-			$types[$key] = $name;
-		}
-	
-		/** @var InputfieldAsmSelect $f */
-		$f = $this->modules->get('InputfieldAsmSelect');
-		$f->attr('name', 'noBorderTypes');
-		$f->label = $this->_('Input types that should have no border');
-		$f->description = $this->_('This setting applies to any selected types when used at 100% width.');
-		$f->icon = 'low-vision';
-		$f->set('themeOffset', true);
-		foreach($types as $className => $name) {
-			$f->addOption($className, $name);
-		}
-		$f->attr('value', $this->noBorderTypes);
-		$fieldset->add($f);
-		
-		/** @var InputfieldAsmSelect $f */
-		$f = $this->modules->get('InputfieldAsmSelect');
-		$f->attr('name', 'cardTypes');
-		$f->label = $this->_('Input types that should use the “Card” style');
-		$f->description = $this->_('This field is an example of the card style.');
-		$f->notes = $this->_('Does not apply to types selected to have no border.');
-		$f->icon = 'list-alt';
-		$f->set('themeBorder', 'card');
-		$f->set('themeOffset', true);
-		foreach($types as $className => $name) {
-			$f->addOption($className, $name);
-		}
-		$f->attr('value', $this->cardTypes);
-		$fieldset->add($f);
-		
-		/** @var InputfieldAsmSelect $f */
-		$f = $this->modules->get('InputfieldAsmSelect');
-		$f->attr('name', 'offsetTypes');
-		$f->label = $this->_('Input types that should be vertically offset');
-		$f->description = $this->_('You can select types individually here, or you can offset ALL types by using the field below this.');
-		$f->icon = 'arrows-v';
-		foreach($types as $className => $name) {
-			$f->addOption($className, $name);
-		}
-		$f->attr('value', $this->offsetTypes);
-		$f->showIf = 'useOffset=0';
-		$fieldset->add($f);
-		
-		/** @var InputfieldCheckboxes $f */
-		$f = $this->modules->get('InputfieldCheckbox');
-		$f->attr('name', 'useOffset');
-		$f->label = $this->_('Vertically offset ALL input types?');
-		$f->description =
-			$this->_('When checked, a vertical margin is added to every field.') . ' ' .
-			$this->_('This may provide additional clarity in some cases, but consumes more vertical space.');
-		$f->collapsed = Inputfield::collapsedBlank;
-		$f->icon = 'arrows-v';
-		if($this->useOffset) $f->attr('checked', 'checked');
-		$fieldset->add($f);
-
+		include(__DIR__ . '/config.php');
+		AdminThemeUikitConfig($this, $inputfields);
 	}
 }
 

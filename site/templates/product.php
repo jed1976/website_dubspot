@@ -19,7 +19,6 @@ function product_video_url($page)
 }
 
 print(
-
   div(['data-pw-id'=>'content'],
     article(
       div(['class'=>'relative vh-100'],

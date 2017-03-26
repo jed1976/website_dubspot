@@ -10,48 +10,50 @@ if(!defined("PROCESSWIRE")) die();
 /** @var Notices $notices */
 
 ?>
-<header id='pw-masthead-mobile' class='uk-hidden@m uk-background-muted'>
+<header id='pw-masthead-mobile' class='pw-masthead uk-hidden@s uk-background-muted'>
 	<div class='pw-container uk-container uk-container-expand'>
 		<div class='uk-padding-small uk-text-center'>
-			<a href='#' onclick='$("#offcanvas-toggle").click(); return false;'>
+			<a href='#' class='pw-logo-link'>
 				<img class='pw-logo' src='<?php echo $adminTheme->getLogoURL(); ?>' alt='ProcessWire' />
 			</a>
 		</div>	
 	</div>	
 </header>
-<header id='pw-masthead' class='uk-background-muted uk-visible@m'>
+<header id='pw-masthead' class='pw-masthead uk-background-muted uk-visible@s'>
 	<div class='pw-container uk-container uk-container-expand'>
 		<nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
 			<div class="uk-navbar-left">
-				<a class="uk-logo uk-margin-right" href='#' onclick='$("#offcanvas-toggle").click(); return false;'>
+				<a class="pw-logo-link uk-logo uk-margin-right" href='#'>
 					<img class='pw-logo' src='<?php echo $adminTheme->getLogoURL(); ?>' alt='ProcessWire'>
 				</a>
 				<?php if($adminTheme->isLoggedIn): ?>
-				<ul class='uk-navbar-nav'>
+				<ul class='uk-navbar-nav pw-primary-nav'>
 					<?php echo $adminTheme->renderPrimaryNavItems(); ?>
 				</ul>	
 				<?php endif; ?>
 			</div>
 			<?php if($adminTheme->isLoggedIn): ?>
-			<div class="uk-navbar-right uk-visible@m">
-				<ul class='uk-navbar-nav uk-margin-right'>
+			<div class="uk-navbar-right">
+				<ul class='uk-navbar-nav uk-margin-right pw-user-nav'>
 					<li>
 						<a id="tools-toggle" class="pw-dropdown-toggle" href="<?php echo $urls->admin; ?>profile/">
 							<?php echo $adminTheme->renderNavIcon('user') . $user->name; ?>
 						</a>
 						<ul class="pw-dropdown-menu" data-my="left top" data-at="left bottom" style="display: none;">
-							<?php if($config->debug): ?>
+							<?php if($config->debug && strpos($adminTheme->layout, 'sidenav') === false): ?>
 							<li>	
 								<a href='#' onclick="$('#debug_toggle').click(); return false;">
 									<?php echo $adminTheme->renderNavIcon('bug') . __('Debug'); ?>
 								</a>
 							</li>
 							<?php endif; ?>
+							<!--
 							<li>	
 								<a target='_top' href='<?php echo $urls->admin; ?>?admin_layout=sidenav'>
 									<?php echo $adminTheme->renderNavIcon('indent') . __('Enable sidebars'); ?>
 								</a>
 							</li>
+							-->
 							<?php echo $adminTheme->renderUserNavItems(); ?>
 						</ul>
 					</li>
@@ -65,5 +67,5 @@ if(!defined("PROCESSWIRE")) die();
 	</div>
 	<?php echo $adminTheme->renderExtraMarkup('masthead'); ?>
 </header>
-<?php echo $adminTheme->renderNotices($notices); ?>
+<?php if(strpos($adminTheme->layout, 'sidenav-tree') === false) echo $adminTheme->renderNotices($notices); ?>
 

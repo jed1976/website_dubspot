@@ -918,29 +918,22 @@ function video($attributes = [], $content = '')
  * @param  $email string  User email address.
  * @return array          \ProcessWire\User and token.
  */
-function fetch_or_create_user($email = '')
+function security_check()
 {
-  $u = \ProcessWire\wire('users')->get("email=$email");
+  $pages    = \ProcessWire\wire('pages');
+  $session  = \ProcessWire\wire('session');
+  $users    = \ProcessWire\wire('users');
 
-  // Create User
-  if ($u instanceof \ProcessWire\NullPage) {
-    $u = \ProcessWire\wire('users')->add($email);
-    $u->email = $email;
-    $u->addRole('pending');
+  // Variables
+  $email        = $session->get('email');
+  $ip           = $_SERVER['REMOTE_ADDR'];
+  $redirect_url = $pages->get('name=signin')->url;
+  $token_2      = $session->get('token_2');
+  $u            = $users->get("email=$email, user_token_1='', user_token_1_expiration=-1, user_token_2=$token_2, user_ip=$ip");
+
+  if ($u instanceof \ProcessWire\NullPage || $email === '' || $token_2 === '') {
+    $session->redirect($redirect_url);
   }
-
-  // Create tokens
-  $string = $email.\ProcessWire\wire('config')->userAuthSalt.time();
-  $token = sha1(str_shuffle($string));
-  $u->setOutputFormatting(false); // Needed in order to make change to properties
-  $u->pass = $token;
-  $u->user_ip = $_SERVER['REMOTE_ADDR'];
-  $u->user_token = sha1(str_shuffle($string));
-  $u->user_token_timestamp = time();
-  $u->save();
-  $u->setOutputFormatting(true);
-
-  return ['user' => $u, 'token' => $token];
 }
 
 /**
@@ -979,12 +972,33 @@ function product_color(\ProcessWire\Page $product)
  */
 function send_email($to_address = '', $from_address = '', $from_title = '', $subject = '', $body = '')
 {
+  $logo_src = \ProcessWire\wire('config')->httpHost.\ProcessWire\wire('urls')->templates."images/dubspot-circle-logo.png";
+  $html = <<<EOD
+<!DOCTYPE html>
+<html>
+  <body>
+    <table border="0" width="100%">
+      <tr>
+        <td cellpadding="10" center valign="top">
+          <img alt="Dubspot Logo" height="96" src="http://$logo_src" width="96">
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">
+          $body
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+EOD;
+
   $mail = \ProcessWire\wire('mail')->new();
-  $mail->to($to)
+  $mail->to($to_address)
     ->from($from_address, $from_title)
     ->subject($subject)
-    ->body($sanitizer->markupToText($body))
-    ->bodyHTML($body)
+    ->body(\ProcessWire\wire('sanitizer')->markupToText($body))
+    ->bodyHTML($html)
     ->send();
 }
 

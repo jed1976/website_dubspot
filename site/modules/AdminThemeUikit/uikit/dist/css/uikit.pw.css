@@ -13196,6 +13196,17 @@ a.tooltip:hover {
 .ui-datepicker .ui-timepicker-div .ui-timepicker-rtl dl dd {
   margin: 0 65px 10px 10px;
 }
+.ui-layout-resizer {
+  background-color: #f8f8f8;
+  border-color: #f8f8f8;
+}
+.ui-layout-pane {
+  border-color: #f8f8f8;
+}
+.ui-layout-toggler {
+  background-color: #d2d2d2;
+  border-color: #d2d2d2;
+}
 .ui-menu {
   background: #fff;
   padding: 10px 0;
@@ -13322,6 +13333,9 @@ a.tooltip:hover {
    * PageListItem
    *
    */
+}
+.PageList .PageList {
+  margin-left: 2em;
 }
 .PageList .PageListStatusIcon {
   color: #999;
@@ -13463,6 +13477,9 @@ a.tooltip:hover {
 }
 .PageListSelectHeader .PageListActions {
   padding-left: 4px;
+}
+body.pw-narrow-width .PageList .PageList {
+  margin-left: 1em;
 }
 .InputfieldForm {
   margin-bottom: 20px;
@@ -14206,6 +14223,14 @@ table.AdminDataTable .Inputfields .Inputfield .InputfieldContent {
 .pw-notices .uk-alert-danger .notice-remove {
   color: #f0506e;
 }
+.pw-layout-sidenav-tree .pw-notices,
+.pw-layout-sidenav-tree-alt .pw-notices {
+  margin-top: 0;
+}
+.pw-layout-sidenav-tree .pw-notices > li:first-child,
+.pw-layout-sidenav-tree-alt .pw-notices > li:first-child {
+  margin-top: 0;
+}
 .ProcessPageEditImageSelect #selected_image_settings {
   margin-top: 0;
 }
@@ -14312,6 +14337,9 @@ body.pw-layout-sidenav-side #pw-sidenav-bar {
   position: absolute;
   top: 15px;
   right: 20px;
+}
+#pw-masthead.pw-masthead-broken .pw-primary-nav {
+  display: none;
 }
 @media screen and (max-width: 959px) {
   #pw-content-head-buttons {

@@ -2,41 +2,28 @@
 namespace DS;
 use DS\Components as cmp;
 
-// Variables
-$email          = $input->post('email');
+$action_url     = $pages->get('template=script, name=auth')->url;
+$final_url      = $pages->get('template=secure-page, name=dashboard')->url;
+$redirect_url   = $pages->get('template=page, name=sent')->url;
 $token_name     = $this->session->CSRF->getTokenName();
 $token_value    = $this->session->CSRF->getTokenValue();
 
-// Validation
-if (empty($email) === false && $session->CSRF->validate()) {
-  $email = $sanitizer->email($email);
-  $u = fetch_or_create_user($email);
-
-  // Send email
-  $mail_template  = $pages->get('template=email_template, name=account-signup');
-  $from_address   = $pages->get('template=email_address, name=no-reply');
-  $body           = str_replace('{{ DOMAIN }}', $config->httpHost, $mail_template->body);
-  $body           = str_replace('{{ TOKEN }}', $u['token'], $body);
-
-  send_email($email, $from_address->email, $from_address->title, $mail_template->subject, $body);
-
-  $session->redirect('/signin/code/');
-}
-
 print(
-
   div(['data-pw-id' => 'content'],
-    div(['class'=>'dt min-vh-100 w-100'],
-      form(['action'=>$page->url, 'class'=>'dtc v-mid','method'=>'POST'],
-        fieldset(['class'=>'bn center mw6-ns nt2 ph0-ns ph3'],
-          h2(['class'=>'f1-ns f2 fw7 ma0 mb5'], $page->subtitle).
-          div(['class'=>'mb3 overflow-hidden'], $page->body).
-          input(['name'=>$token_name, 'type'=>'hidden', 'value'=>$token_value]).
-          input(['class'=>'b--ds-yellow ba bg-black border-box br0 db f5 pa3 w-100 white', 'name'=>'email', 'placeholder'=>'Email Address', 'required'=>1]).
-          input(['class'=>'b--ds-yellow ba bg-ds-yellow black br0 f5-ns f6 fw7 db dim input-reset ph4 pointer pv2 pv3 ttu w-100', 'name'=>'submit', 'type'=>'submit', 'value'=>'Send Email'])
+    div(['class' => 'dt min-vh-100 w-100'],
+      form(['action'=>$action_url, 'class' => 'dtc v-mid','method' => 'POST'],
+        input(['name'=>'final_url', 'type' => 'hidden', 'value'=>$final_url]).
+        input(['name'=>'redirect_url', 'type' => 'hidden', 'value'=>$redirect_url]).
+        input(['name'=>'referrer', 'type' => 'hidden', 'value'=>$page->url]).
+        input(['name'=>$token_name, 'type' => 'hidden', 'value'=>$token_value]).
+
+        fieldset(['class' => 'bn center mw6-ns nt2 ph0-ns ph3'],
+          h2(['class' => 'f1-ns f2 fw7 ma0 mb5-ns mb4'], $page->subtitle).
+          div(['class' => 'f4-ns f5 mb3 overflow-hidden'], $page->body).
+          input(['class' => 'b--ds-yellow ba bg-black border-box br0 db f5 pa3 w-100 white', 'name' => 'email', 'placeholder' => 'Email Address', 'required'=>1]).
+          input(['class' => 'b--ds-yellow ba bg-ds-yellow black br0 f5-ns f6 fw7 db dim input-reset ph4 pointer pv2 pv3 ttu w-100', 'name' => 'submit', 'type' => 'submit', 'value' => 'Send Email'])
         )
       )
     )
   )
-
 );

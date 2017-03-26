@@ -35,13 +35,7 @@ if(!defined("PROCESSWIRE")) die();
 		}
 	</style>
 	<script>
-		$(document).on('mouseover', 'a', function(e) {
-			var $a = $(this);
-			var href = $a.attr('href');
-			if(href.length > 1 && !$a.attr('target')) {
-				$a.attr('target', 'main');	
-			}
-		});
+		$(document).on('mouseover', 'a', ProcessWireAdminTheme.linkTargetMainMouseoverEvent);
 	</script>
 </head>
 <body class='<?php echo $adminTheme->getBodyClass(); ?> uk-background-secondary'>

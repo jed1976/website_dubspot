@@ -19,8 +19,8 @@ if(!isset($content)) $content = '';
 <head>
 	<?php include($config->paths->adminTemplates . '_head.php'); ?>
 </head>
-<body class='<?php echo $adminTheme->getBodyClass(); ?>'>
-	<main id='main' class='pw-container uk-container uk-container-expand uk-margin uk-margin-large-bottom'>
+<body class='<?php echo $adminTheme->getBodyClass(); ?> pw-narrow-width'>
+	<main id='main' class='pw-container uk-container uk-container-expand uk-margin-small-top uk-margin-small-left uk-margin-large-bottom'>
 		<div class='pw-content' id='content'>
 			<div id='pw-content-body'>
 				<?php echo $content; ?>
@@ -28,13 +28,7 @@ if(!isset($content)) $content = '';
 		</div>
 	</main>
 	<script>
-		$(document).on('mouseover', 'a', function(e) {
-			var $a = $(this);
-			var href = $a.attr('href');
-			if(href.length > 1 && !$a.attr('target')) {
-				$a.attr('target', 'main');
-			}
-		});
+		$(document).on('mouseover', 'a', ProcessWireAdminTheme.linkTargetMainMouseoverEvent);
 	</script>
 </body>
 </html>

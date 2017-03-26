@@ -36,11 +36,21 @@ if(!isset($content)) $content = '';
 
 	<?php
 	if($layout == 'sidenav') {
-		// sidenav 
 		include(__DIR__ . "/_sidenav-masthead.php");
+		
+	} else if($layout == 'sidenav-tree' || $layout == 'sidenav-tree-alt') {
+		// masthead not rendered in this frame
+		if(strpos($process, 'ProcessPageList') === 0) {
+			echo "<script>parent.closeTreePane();</script>";
+		} else {
+			echo "<script>if(!parent.isMobileWidth()) parent.openTreePane();</script>";
+		}
+		echo $adminTheme->renderNotices($notices);
+		
 	} else if($layout == 'modal') {
 		// no masthead
 		echo $adminTheme->renderNotices($notices);
+		
 	} else {
 		include(__DIR__ . "/_masthead.php");
 	}
@@ -52,7 +62,7 @@ if(!isset($content)) $content = '';
 			
 			<header id='pw-content-head'>
 				
-				<?php if(!$layout) echo $adminTheme->renderBreadcrumbs(); ?>
+				<?php if($layout != 'sidenav' && $layout != 'modal') echo $adminTheme->renderBreadcrumbs(); ?>
 
 				<div id='pw-content-head-buttons' class='uk-float-right uk-margin-small-top uk-visible@s'>
 					<?php echo $adminTheme->renderAddNewButton(); ?>
@@ -78,7 +88,7 @@ if(!isset($content)) $content = '';
 	<?php
 	if(!$adminTheme->isModal) {
 		include(__DIR__ . '/_footer.php');
-		if($adminTheme->isLoggedIn) include(__DIR__ . '/_offcanvas.php');
+		if($adminTheme->isLoggedIn && strpos($layout, 'sidenav') !== 0) include(__DIR__ . '/_offcanvas.php');
 	}
 	echo $adminTheme->renderExtraMarkup('body');
 	?>

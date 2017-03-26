@@ -11,6 +11,8 @@
 @pw-page-list-status-icon-color: @pw-page-list-muted-text-color;
 
 @pw-page-list-line-height: 1.5em;
+@pw-page-list-indent: 2em;
+@pw-page-list-indent-small: 1em;
 
 @pw-page-list-action-link-color: @global-inverse-color;
 @pw-page-list-action-link-background-color: @global-link-color;
@@ -23,7 +25,11 @@
 @pw-page-list-action-link-border-radius: 3px;
 
 .PageList {
-
+  
+  .PageList {
+    margin-left: @pw-page-list-indent;
+  }
+  
   /**
    * Actions: like the "|edit|view|new" in the PageList
    *
@@ -204,4 +210,8 @@
 
 .PageListSelectHeader .PageListActions {
   padding-left: 4px;
+}
+
+body.pw-narrow-width .PageList .PageList {
+  margin-left: @pw-page-list-indent-small;
 }
