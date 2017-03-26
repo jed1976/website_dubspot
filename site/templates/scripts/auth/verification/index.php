@@ -21,6 +21,6 @@ $u->user_token_expiration = -1;
 $u->save();
 $u->setOutputFormatting(true);
 
-$session->forceLogin($u);
 $session->remove('email');
+$session->forceLogin($u);
 $session->redirect($final_url);

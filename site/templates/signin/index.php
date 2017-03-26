@@ -2,11 +2,15 @@
 namespace DS;
 use DS\Components as cmp;
 
-$action_url     = $pages->get('template=script, name=auth')->url;
+$action_url     = $pages->get('template=script, name=signin')->url;
 $final_url      = $pages->get('template=secure-page, name=dashboard')->url;
 $redirect_url   = $pages->get('template=page, name=sent')->url;
 $token_name     = $this->session->CSRF->getTokenName();
 $token_value    = $this->session->CSRF->getTokenValue();
+
+if ($user->isLoggedIn()) {
+  $session->redirect($final_url);
+}
 
 print(
   div(['data-pw-id' => 'content'],
