@@ -1,2 +1,2 @@
 # Prototype for Dubspot, LLC
-Developed with PHP using the ProcessWire CMS. Explored the use of PHP components and utility-based CSS.
+Developed with PHP using the [ProcessWire CMS](https://processwire.com). Explored the use of PHP components and utility-based CSS.
